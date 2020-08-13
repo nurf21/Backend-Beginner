@@ -3,9 +3,13 @@ const {
     getAllProduct, 
     getProductById,
     getProductByName,
+    getProductNameSorted,
+    getProductCategorySorted,
+    getProductDateSorted,
+    getProductPriceSorted,
     postProduct,
     patchProduct,
-    deleteProduct
+    deleteProduct, 
 } = require('../model/product')
 
 // Import helper
@@ -49,8 +53,39 @@ module.exports = {
                 return helper.response(response, 404, `Product not found`, result)
             }
         } catch (error) {
-            // return helper.response(response, 400, "Bad Request", error)
-            console.log(error)
+            return helper.response(response, 400, "Bad Request", error)
+        }
+    },
+    getProductNameSorted: async (request, response) => {
+        try {
+            const result = await getProductNameSorted()
+            return helper.response(response, 200, 'Get Product Success', result)
+        } catch (error) {
+            return helper.response(response, 400, "Bad Request", error)
+        }
+    },
+    getProductCategorySorted: async (request, response) => {
+        try {
+            const result = await getProductCategorySorted()
+            return helper.response(response, 200, 'Get Product Success', result)
+        } catch (error) {
+            return helper.response(response, 400, "Bad Request", error)
+        }
+    },
+    getProductDateSorted: async (request, response) => {
+        try {
+            const result = await getProductDateSorted()
+            return helper.response(response, 200, 'Get Product Success', result)
+        } catch (error) {
+            return helper.response(response, 400, "Bad Request", error)
+        }
+    },
+    getProductPriceSorted: async (request, response) => {
+        try {
+            const result = await getProductPriceSorted()
+            return helper.response(response, 200, 'Get Product Success', result)
+        } catch (error) {
+            return helper.response(response, 400, "Bad Request", error)
         }
     },
     postProduct: async (request, response) => {
