@@ -21,5 +21,12 @@ module.exports = {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
+    },
+    postHistory: (setData) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`INSERT INTO history SET ?`, setData, (error, result) => {
+                !error ? resolve(result) : reject(new Error(error))
+            })
+        })
     }
 }

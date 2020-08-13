@@ -19,5 +19,20 @@ module.exports = {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
+    },
+    postOrder: (setData) => {
+        return new Promise((resolve, reject) => {
+            connection.query('INSERT INTO orders SET ?', setData, (error, result) => {
+                if (!error) {
+                    const newResult = {
+                        category_id: result.insertId,
+                        ...setData
+                    }
+                    resolve(newResult)
+                } else {
+                    reject(new Error(error))
+                }
+            })
+        })
     }
 }

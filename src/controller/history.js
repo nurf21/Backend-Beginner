@@ -1,7 +1,8 @@
 // Import object dari model
 const {
     getAllHistory,
-    getHistoryById
+    getHistoryById,
+    postHistory
 } = require('../model/history')
 // Import helper
 const helper = require('../helper')
@@ -34,4 +35,17 @@ module.exports = {
             return helper.response(response, 400, 'Bad Request', error)
         }
     },
+    postHistory: async (request, response) => {
+        try {
+            const setData = {
+                history_invoice: Math.floor(100000 + Math.random() * 900000),
+                history_subtotal: 0,
+                history_created_at: new Date(),
+            }
+            const result = await postHistory(setData)
+            // console.log(result.insertId)
+        } catch (error) {
+            return helper.response(response, 400, 'Bad Request', error)
+        }
+    }
 }
