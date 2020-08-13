@@ -2,6 +2,7 @@
 const {
     getAllProduct, 
     getProductById,
+    getProductByName,
     postProduct,
     patchProduct,
     deleteProduct
@@ -30,12 +31,26 @@ module.exports = {
             const { id } = request.params
             const result = await getProductById(id)
             if (result.length > 0) {
-                return helper.response(response, 200, "Get Product Success", result)
+                return helper.response(response, 200, 'Get Product Success', result)
             } else {
                 return helper.response(response, 404, `Product by id: ${id} not found`, result) 
             }
         } catch (error) {
             return helper.response(response, 400, "Bad Request", error)
+        }
+    },
+    getProductByName: async (request, response) => {
+        try {
+            const { keyword } = request.params
+            const result = await getProductByName(keyword)
+            if (result.length > 0) {
+                return helper.response(response, 200, 'Get Product Success', result)
+            } else {
+                return helper.response(response, 404, `Product not found`, result)
+            }
+        } catch (error) {
+            // return helper.response(response, 400, "Bad Request", error)
+            console.log(error)
         }
     },
     postProduct: async (request, response) => {

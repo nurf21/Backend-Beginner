@@ -22,6 +22,16 @@ module.exports = {
             })
         })
     },
+    getProductByName: (keyword) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
+            product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
+            product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id 
+            WHERE product.product_name LIKE ?`, `%${keyword}%`, (error, result) => {
+                !error ? resolve(result) : reject(new Error(error))
+            })
+        })
+    },
     postProduct: (setData) => {
         return new Promise((resolve, reject) => {
             connection.query('INSERT INTO product SET ?', setData, (error, result) => {
