@@ -48,11 +48,11 @@ module.exports = {
                 category_id,
                 product_created_at: new Date(),
                 product_status
-        }
-        const result = await postProduct(setData)
-        return helper.response(response, 201, "Product Added", result)
+            }
+            const result = await postProduct(setData)
+            return helper.response(response, 201, 'Product Added', result)
         } catch (error) {
-            return helper.response(response, 400, "Bad Request", error)
+            return helper.response(response, 400, 'Bad Request', error)
         }
     },
     patchProduct: async (request, response) => {
@@ -66,16 +66,16 @@ module.exports = {
                 category_id,
                 product_updated_at: new Date(),
                 product_status
-        }
-        const checkId = await getProductById(id)
+            }
+            const checkId = await getProductById(id)
             if (checkId.length > 0) {
                 const result = await patchProduct(setData, id)
-                return helper.response(response, 201, "Product Updated", result)
+                return helper.response(response, 201, 'Product Updated', result)
             } else {
                 return helper.response(response, 404, `Product by id: ${id} Not Found`)
             }
         } catch (error) {
-            return helper.response(response, 400, "Bad Request", error)
+            return helper.response(response, 400, 'Bad Request', error)
         }
     },
     deleteProduct: async (request, response) => {
@@ -89,7 +89,7 @@ module.exports = {
                 return helper.response(response, 404, `Product by id: ${id} Not Found`)
             }
         } catch (error) {
-            return helper.response(response, 400, "Bad Request", error)
+            return helper.response(response, 400, 'Bad Request', error)
         }
     }
 }
