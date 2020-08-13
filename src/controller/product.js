@@ -1,5 +1,12 @@
-// Import object dari model
-const {getAllProduct,getProductById, postProduct, patchProduct, deleteProduct} = require('../model/product')
+// Import object from model
+const {
+    getAllProduct, 
+    getProductById,
+    postProduct,
+    patchProduct,
+    deleteProduct
+} = require('../model/product')
+
 // Import helper
 const helper = require('../helper')
 const { request } = require('express')
@@ -10,12 +17,12 @@ module.exports = {
         try {
             const result = await getAllProduct()
             if (result.length > 0) {
-                return helper.response(response, 200, "Get Product Success", result)
+                return helper.response(response, 200, 'Get Product Success', result)
             } else {
-                return helper.response(response, 404, "Product Not Found", result)
+                return helper.response(response, 404, 'Product Not Found', result)
             }
         } catch (error) {
-            return helper.response(response, 400, "Bad Request", error)
+            return helper.response(response, 400, 'Bad Request', error)
         }
     },
     getProductById: async (request, response) => {

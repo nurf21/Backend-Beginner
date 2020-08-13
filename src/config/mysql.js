@@ -1,7 +1,7 @@
 // Import dependencies
 const mysql = require('mysql')
 
-// Mengkoneksikan dengan database
+// Connect to database
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -9,13 +9,13 @@ const connection = mysql.createConnection({
     database: 'pos_app'
 })
 
-// Handling error
+// Error handling
 connection.connect(error => {
     if (error) {
         throw error
     }
-    console.log('You are now connected ...')
+    console.log('You are now connected to database.')
 })
 
-// Export koneksi
+// Export connection
 module.exports = connection

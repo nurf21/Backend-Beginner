@@ -1,17 +1,23 @@
-// Import connection
+// Import connection from config
 const connection = require('../config/mysql')
 
 module.exports = {
     getAllProduct: () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM product', (error, result) => {
+            connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
+            product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
+            product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id`, 
+            (error, result) => {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
     },
     getProductById: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM product WHERE product_id = ?', id, (error, result) => {
+            connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
+            product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
+            product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id 
+            WHERE product_id = ?`, id, (error, result) => {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
