@@ -28,5 +28,12 @@ module.exports = {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
+    },
+    patchHistory: (setData, id) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`UPDATE history SET ? WHERE history_id = ?`, [setData, id], (error, result) => {
+                !error ? resolve(result) : reject(new Error(error))
+            })
+        })
     }
 }
