@@ -22,6 +22,13 @@ module.exports = {
             })
         })
     },
+    getHistoryById2: (id) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`SELECT * from history WHERE history_id = ?`, id, (error, result) => {
+                !error ? resolve(result) : reject(new Error(error)) 
+            })
+        })
+    },
     postHistory: (setData) => {
         return new Promise((resolve, reject) => {
             connection.query(`INSERT INTO history SET ?`, setData, (error, result) => {

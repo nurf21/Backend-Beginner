@@ -2,10 +2,14 @@
 const {
     getAllHistory,
     getHistoryById,
+    getHistoryById2,
     postHistory,
     patchHistory
 } = require('../model/history')
-const { postOrder } = require('../model/order')
+const {
+    postOrder,
+    getOrderById2
+ } = require('../model/order')
 const { getProductById } = require('../model/product')
 // Import helper
 const helper = require('../helper')
@@ -25,15 +29,35 @@ module.exports = {
             return helper.response(response, 400, 'Bad Request', error)
         }
     },
+    // getHistoryById: async (request, response) => {
+    //     try {
+    //         const { id } = request.params
+    //         const result = await getHistoryById(id)
+    //         if (result.length > 0) {
+                // return helper.response(response, 200, `Get History by id: ${id} Success`, result)
+    //         } else {
+    //             return helper.response(response, 404, `History by id: ${id} Not Found`, result)
+    //         }
+    //     } catch (error) {
+    //         return helper.response(response, 400, 'Bad Request', error)
+    //     }
+    // },
     getHistoryById: async (request, response) => {
         try {
             const { id } = request.params
-            const result = await getHistoryById(id)
-            if (result.length > 0) {
-                return helper.response(response, 200, `Get History by id: ${id} Success`, result)
-            } else {
-                return helper.response(response, 404, `History by id: ${id} Not Found`, result)
+            const result = await getHistoryById2(id)
+            // console.log(result[0].history_id)
+            const result2 = await getOrderById2(id)
+            // console.log(result2)
+            const result3 = {
+                history_id: result[0].history_id,
+                invoice: result[0].history_invoice,
+                orders: result2,
+                subtotal: result[0].history_subtotal,
+                history_created_at: result[0].history_created_at
             }
+            console.log(result3)
+            return helper.response(response, 200, `Get History by id: ${id} Success`, result3)
         } catch (error) {
             return helper.response(response, 400, 'Bad Request', error)
         }
