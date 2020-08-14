@@ -1,6 +1,7 @@
 // Import object from model
 const {
-    getAllProduct, 
+    getProduct,
+    getProductCount,
     getProductById,
     getProductByName,
     getProductNameSorted,
@@ -11,21 +12,59 @@ const {
     patchProduct,
     deleteProduct, 
 } = require('../model/product')
+const qs = require('querystring')
 
 // Import helper
 const helper = require('../helper')
 const { request } = require('express')
 const { response } = require('../helper')
 
+const getPrevLink = (page, currentQuery) => {
+    if (page > 1) {
+        const generatePage = {
+            page: page - 1
+        }
+        const resultPrevLink = {...currentQuery, ...generatePage}
+        return qs.stringify(resultPrevLink)
+    } else {
+        return null
+    }
+}
+
+const getNextLink = (page, totalPage, currentQuery) => {
+    if (page < totalPage) {
+        const generatePage = {
+            page: page + 1
+        }
+        const resultPrevLink = {...currentQuery, ...generatePage}
+        return qs.stringify(resultPrevLink)
+    } else {
+        return null
+    }
+}
+
 module.exports = {
     getAllProduct: async (request, response) => {
+        // let {page, limit, search, sort} = request.query
+        let {page, limit} = request.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const totalData = await getProductCount()
+        let totalPage = Math.ceil(totalData / limit)
+        let offset = page * limit - limit
+        let prevLink = getPrevLink(page, request.query)
+        let nextLink = getNextLink(page, totalPage, request.query)
+        const pageInfo = {
+            limit,
+            page,
+            totalPage,
+            totalData,
+            prevLink: prevLink && `http://127.0.0.1:3001/product?${prevLink}`,
+            nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`
+        }
         try {
-            const result = await getAllProduct()
-            if (result.length > 0) {
-                return helper.response(response, 200, 'Get Product Success', result)
-            } else {
-                return helper.response(response, 404, 'Product Not Found', result)
-            }
+            const result = await getProduct(limit, offset)
+            return helper.response(response, 200, 'Get Product Success', result, pageInfo)
         } catch (error) {
             return helper.response(response, 400, 'Bad Request', error)
         }
