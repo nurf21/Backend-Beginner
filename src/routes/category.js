@@ -2,13 +2,13 @@
 const router = require('express').Router()
 
 // Import object from controller
-const {getAllCategory,
-    getCategoryById,
-    postCategory,
-    patchCategory,
-    deleteCategory
+const {
+  getAllCategory,
+  getCategoryById,
+  postCategory,
+  patchCategory,
+  deleteCategory
 } = require('../controller/category')
-const route = require('..')
 
 // [GET]
 router.get('/', getAllCategory)

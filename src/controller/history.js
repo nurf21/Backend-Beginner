@@ -1,101 +1,45 @@
-// Import object dari model
+// Import object from model
 const {
-    getAllHistory,
-    getHistoryById,
-    getHistoryById2,
-    postHistory,
-    patchHistory
+  getAllHistory,
+  getHistoryById
 } = require('../model/history')
 const {
-    postOrder,
-    getOrderById2
- } = require('../model/order')
-const { getProductById } = require('../model/product')
+  getOrderByHistoryId
+} = require('../model/order')
+
 // Import helper
 const helper = require('../helper')
-const { request } = require('express')
-const { response } = require('../helper')
 
 module.exports = {
-    getAllHistory: async (request, response) => {
-        try {
-            const result = await getAllHistory()
-            if (result.length > 0) {
-                return helper.response(response, 200, 'Get History Success', result)
-            } else {
-                return helper.response(response, 404, 'History Not Found', result)
-            }
-        } catch (error) {
-            return helper.response(response, 400, 'Bad Request', error)
-        }
-    },
-    // getHistoryById: async (request, response) => {
-    //     try {
-    //         const { id } = request.params
-    //         const result = await getHistoryById(id)
-    //         if (result.length > 0) {
-                // return helper.response(response, 200, `Get History by id: ${id} Success`, result)
-    //         } else {
-    //             return helper.response(response, 404, `History by id: ${id} Not Found`, result)
-    //         }
-    //     } catch (error) {
-    //         return helper.response(response, 400, 'Bad Request', error)
-    //     }
-    // },
-    getHistoryById: async (request, response) => {
-        try {
-            const { id } = request.params
-            const result = await getHistoryById2(id)
-            // console.log(result[0].history_id)
-            const result2 = await getOrderById2(id)
-            // console.log(result2)
-            const result3 = {
-                history_id: result[0].history_id,
-                invoice: result[0].history_invoice,
-                orders: result2,
-                subtotal: result[0].history_subtotal,
-                history_created_at: result[0].history_created_at
-            }
-            console.log(result3)
-            return helper.response(response, 200, `Get History by id: ${id} Success`, result3)
-        } catch (error) {
-            return helper.response(response, 400, 'Bad Request', error)
-        }
-    },
-    postHistory: async (request, response) => {
-        try {
-            const setData = {
-                history_invoice: Math.floor(100000 + Math.random() * 900000),
-                history_subtotal: 0,
-                history_created_at: new Date(),
-            }
-            const result = await postHistory(setData)
-            const history_id = (result.insertId)
-            const dataOrder = request.body.orders
-            subTotal = 0
-            for (let i = 0; i < dataOrder.length; i++) {
-                const product_id2 = dataOrder[i].product_id;
-                const qty2 = dataOrder[i].qty
-                const result2 = await getProductById(product_id2)
-                const RowDataPacket = result2[0]
-                const product_price2 = RowDataPacket.product_price
-                const setData2 = {
-                    history_id: history_id,
-                    product_id: product_id2,
-                    order_qty: qty2,
-                    order_total_price: qty2*product_price2
-                }
-                const result3 = await postOrder(setData2)
-                subTotal += result3.order_total_price
-            }
-            const subTotal2 = subTotal+(subTotal*10/100)
-            const setData3 = {
-                history_subtotal: subTotal2
-            }
-            const result4 = await patchHistory(setData3, history_id)
-            response.send('Success')
-        } catch (error) {
-            return helper.response(response, 400, 'Bad Request', error)
-        }
+  getAllHistory: async (request, response) => {
+    try {
+      const result = await getAllHistory()
+      return helper.response(response, 200, 'Get History Success', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
     }
+  },
+  getHistoryById: async (request, response) => {
+    try {
+      const { id } = request.params
+      const dataHistory = await getHistoryById(id)
+      const dataOrder = await getOrderByHistoryId(id)
+      let total = 0
+      dataOrder.forEach(value => {
+        total += value.order_total_price
+      })
+      const tax = total * 10 / 100
+      const result = {
+        history_id: dataHistory[0].history_id,
+        invoice: dataHistory[0].history_invoice,
+        orders: dataOrder,
+        tax,
+        subtotal: dataHistory[0].history_subtotal,
+        history_created_at: dataHistory[0].history_created_at
+      }
+      return helper.response(response, 200, `Get History id: ${id} Success`, result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  }
 }

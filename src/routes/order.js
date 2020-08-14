@@ -3,9 +3,9 @@ const router = require('express').Router()
 
 // Import object dari controller
 const {
-    getAllOrder, 
-    getOrderById,
-    postOrder
+  getAllOrder,
+  getOrderById,
+  postOrder
 } = require('../controller/order')
 
 // [GET]

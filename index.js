@@ -8,10 +8,10 @@ const cors = require('cors')
 // Import route from src
 const routerNavigation = require('./src')
 
-// Declare variable app
+// Declare variable app to use express
 const app = express()
 
-// Middleware body-parser and morgan
+// Middleware
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -21,8 +21,6 @@ app.use((request, response, next) => {
   response.header('Access-Control-Allow-Headers', 'Origin, X-Request-With, Content-Type, Accept, Authorization')
   next()
 })
-
-// Middleware endpoint
 app.use('/', routerNavigation)
 
 // Error handling when path is wrong
@@ -32,5 +30,5 @@ app.get('*', (request, response) => {
 
 // Run express on host: 127.0.0.1 and port: 3001
 app.listen(3001, '127.0.0.1', () => {
-  console.log('Express app is listening on host: 127.0.0.1 and port: 3001');
-});
+  console.log('Express app is listening on host: 127.0.0.1 and port: 3001')
+})
