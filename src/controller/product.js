@@ -3,11 +3,7 @@ const {
   getProduct,
   getProductCount,
   getProductById,
-  getProductByName,
-  getProductNameSorted,
-  getProductCategorySorted,
-  getProductDateSorted,
-  getProductPriceSorted,
+  getProductCountByName,
   postProduct,
   patchProduct,
   deleteProduct
@@ -17,6 +13,7 @@ const qs = require('querystring')
 // Import helper
 const helper = require('../helper')
 
+// Pagination
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
     const generatePage = {
@@ -42,27 +39,39 @@ const getNextLink = (page, totalPage, currentQuery) => {
 }
 
 module.exports = {
-  getAllProduct: async (request, response) => {
-    // let {page, limit, search, sort} = request.query
-    let { page, limit } = request.query
-    page = parseInt(page)
-    limit = parseInt(limit)
-    const totalData = await getProductCount()
+  getProduct: async (request, response) => {
+    let { page, limit, search, sort } = request.query
+    page === undefined ? page = 1 : page = parseInt(page)
+    limit === undefined ? limit = 3 : limit = parseInt(limit)
+    let totalData = 0
+    if (search === undefined) {
+      search = ''
+      totalData = await getProductCount()
+    } else {
+      totalData = await getProductCountByName(search)
+    }
+    if (sort === undefined) {
+      sort = 'product_id'
+    }
     const totalPage = Math.ceil(totalData / limit)
     const offset = page * limit - limit
     const prevLink = getPrevLink(page, request.query)
     const nextLink = getNextLink(page, totalPage, request.query)
     const pageInfo = {
-      limit,
       page,
       totalPage,
+      limit,
       totalData,
       prevLink: prevLink && `http://127.0.0.1:3001/product?${prevLink}`,
       nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`
     }
     try {
-      const result = await getProduct(limit, offset)
-      return helper.response(response, 200, 'Get Product Success', result, pageInfo)
+      const result = await getProduct(search, sort, limit, offset)
+      if (result.length > 0) {
+        return helper.response(response, 200, 'Success Get Product', result, pageInfo)
+      } else {
+        return helper.response(response, 404, 'Product not found', result, pageInfo)
+      }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
@@ -80,61 +89,20 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
-  getProductByName: async (request, response) => {
-    try {
-      const { keyword } = request.params
-      const result = await getProductByName(keyword)
-      if (result.length > 0) {
-        return helper.response(response, 200, 'Get Product Success', result)
-      } else {
-        return helper.response(response, 404, 'Product not found', result)
-      }
-    } catch (error) {
-      return helper.response(response, 400, 'Bad Request', error)
-    }
-  },
-  getProductNameSorted: async (request, response) => {
-    try {
-      const result = await getProductNameSorted()
-      return helper.response(response, 200, 'Get Product Success', result)
-    } catch (error) {
-      return helper.response(response, 400, 'Bad Request', error)
-    }
-  },
-  getProductCategorySorted: async (request, response) => {
-    try {
-      const result = await getProductCategorySorted()
-      return helper.response(response, 200, 'Get Product Success', result)
-    } catch (error) {
-      return helper.response(response, 400, 'Bad Request', error)
-    }
-  },
-  getProductDateSorted: async (request, response) => {
-    try {
-      const result = await getProductDateSorted()
-      return helper.response(response, 200, 'Get Product Success', result)
-    } catch (error) {
-      return helper.response(response, 400, 'Bad Request', error)
-    }
-  },
-  getProductPriceSorted: async (request, response) => {
-    try {
-      const result = await getProductPriceSorted()
-      return helper.response(response, 200, 'Get Product Success', result)
-    } catch (error) {
-      return helper.response(response, 400, 'Bad Request', error)
-    }
-  },
   postProduct: async (request, response) => {
     try {
-      const { product_name, product_image, product_price, category_id, product_status } = request.body
+      const productName = request.body.product_name
+      const productImg = request.body.product_image
+      const productPrice = request.body.product_price
+      const categoryId = request.body.category_id
+      const productStatus = request.body.product_status
       const setData = {
-        product_name,
-        product_image,
-        product_price,
-        category_id,
+        product_name: productName,
+        product_image: productImg,
+        product_price: productPrice,
+        category_id: categoryId,
         product_created_at: new Date(),
-        product_status
+        product_status: productStatus
       }
       const result = await postProduct(setData)
       return helper.response(response, 201, 'Product Added', result)
@@ -145,14 +113,18 @@ module.exports = {
   patchProduct: async (request, response) => {
     try {
       const { id } = request.params
-      const { product_name, product_image, product_price, category_id, product_status } = request.body
+      const productName = request.body.product_name
+      const productImg = request.body.product_image
+      const productPrice = request.body.product_price
+      const categoryId = request.body.category_id
+      const productStatus = request.body.product_status
       const setData = {
-        product_name,
-        product_image,
-        product_price,
-        category_id,
+        product_name: productName,
+        product_image: productImg,
+        product_price: productPrice,
+        category_id: categoryId,
         product_updated_at: new Date(),
-        product_status
+        product_status: productStatus
       }
       const checkId = await getProductById(id)
       if (checkId.length > 0) {

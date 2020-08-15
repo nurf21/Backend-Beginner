@@ -3,26 +3,16 @@ const router = require('express').Router()
 
 // Import object dari controller
 const {
-  getAllProduct,
+  getProduct,
   getProductById,
-  getProductByName,
-  getProductNameSorted,
-  getProductCategorySorted,
-  getProductDateSorted,
-  getProductPriceSorted,
   postProduct,
   patchProduct,
   deleteProduct
 } = require('../controller/product')
 
 // [GET]
-router.get('/', getAllProduct)
-router.get('/id/:id', getProductById)
-router.get('/search/:keyword', getProductByName)
-router.get('/namesorted', getProductNameSorted)
-router.get('/categorysorted', getProductCategorySorted)
-router.get('/datesorted', getProductDateSorted)
-router.get('/pricesorted', getProductPriceSorted)
+router.get('/', getProduct)
+router.get('/:id', getProductById)
 
 // [POST]
 router.post('/', postProduct)
