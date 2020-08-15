@@ -2,12 +2,14 @@
 const {
   getProduct,
   getProductCount,
-  getProductById,
   getProductCountByName,
+  getProductById,
   postProduct,
   patchProduct,
   deleteProduct
 } = require('../model/product')
+
+// Import query string
 const qs = require('querystring')
 
 // Import helper

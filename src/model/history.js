@@ -1,34 +1,21 @@
-// Import connection
+// Import connection from config
 const connection = require('../config/mysql')
 
 module.exports = {
-  // getAllHistory: () => {
-  //   return new Promise((resolve, reject) => {
-  //     connection.query(`SELECT history.history_id, history.history_invoice, orders.order_id, product.product_name,
-  //     orders.order_qty, orders.order_total_price, history.history_subtotal, history.history_created_at FROM history
-  //     INNER JOIN orders ON history.history_id = orders.history_id INNER JOIN product
-  //     ON orders.product_id = product.product_id`, (error, result) => {
-  //       !error ? resolve(result) : reject(new Error(error))
-  //     })
-  //   })
-  // },
-  getAllHistory: () => {
+  getAllHistory: (limit, offset) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM history', (error, result) => {
+      connection.query('SELECT * FROM history LIMIT ? OFFSET ?', [limit, offset], (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
     })
   },
-  // getHistoryById: (id) => {
-  //   return new Promise((resolve, reject) => {
-  //     connection.query(`SELECT history.history_id, history.history_invoice, orders.order_id, product.product_name,
-  //     orders.order_qty, orders.order_total_price, history.history_subtotal, history.history_created_at FROM history
-  //     INNER JOIN orders ON history.history_id = orders.history_id INNER JOIN product
-  //     ON orders.product_id = product.product_id WHERE history.history_id = ?`, id, (error, result) => {
-  //       !error ? resolve(result) : reject(new Error(error))
-  //     })
-  //   })
-  // },
+  getHistoryCount: () => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT COUNT(*) as total FROM history', (error, result) => {
+        !error ? resolve(result[0].total) : reject(new Error(error))
+      })
+    })
+  },
   getHistoryById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * from history WHERE history_id = ?', id, (error, result) => {

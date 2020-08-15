@@ -1,20 +1,72 @@
 // Import object from model
 const {
   getAllHistory,
+  getHistoryCount,
   getHistoryById
 } = require('../model/history')
 const {
   getOrderByHistoryId
 } = require('../model/order')
 
+// Import query string
+const qs = require('querystring')
+
 // Import helper
 const helper = require('../helper')
 
+// Pagination
+const getPrevLink = (page, currentQuery) => {
+  if (page > 1) {
+    const generatePage = {
+      page: page - 1
+    }
+    const resultPrevLink = { ...currentQuery, ...generatePage }
+    return qs.stringify(resultPrevLink)
+  } else {
+    return null
+  }
+}
+
+const getNextLink = (page, totalPage, currentQuery) => {
+  if (page < totalPage) {
+    const generatePage = {
+      page: page + 1
+    }
+    const resultPrevLink = { ...currentQuery, ...generatePage }
+    return qs.stringify(resultPrevLink)
+  } else {
+    return null
+  }
+}
+
 module.exports = {
   getAllHistory: async (request, response) => {
+    let { page, limit } = request.query
+    page === undefined ? page = 1 : page = parseInt(page)
+    limit === undefined ? limit = 3 : limit = parseInt(limit)
+    console.log(page)
+    console.log(limit)
+    const totalData = await getHistoryCount()
+    console.log(totalData)
+    const totalPage = Math.ceil(totalData / limit)
+    const offset = page * limit - limit
+    const prevLink = getPrevLink(page, request.query)
+    const nextLink = getNextLink(page, totalPage, request.query)
+    const pageInfo = {
+      page,
+      totalPage,
+      limit,
+      totalData,
+      prevLink: prevLink && `http://127.0.0.1:3001/history?${prevLink}`,
+      nextLink: nextLink && `http://127.0.0.1:3001/history?${nextLink}`
+    }
     try {
-      const result = await getAllHistory()
-      return helper.response(response, 200, 'Get History Success', result)
+      const result = await getAllHistory(limit, offset)
+      if (result.length > 0) {
+        return helper.response(response, 200, 'Success Get Product', result, pageInfo)
+      } else {
+        return helper.response(response, 404, 'Product not found', result, pageInfo)
+      }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
