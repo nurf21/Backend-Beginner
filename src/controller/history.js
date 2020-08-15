@@ -41,13 +41,13 @@ const getNextLink = (page, totalPage, currentQuery) => {
 
 module.exports = {
   getAllHistory: async (request, response) => {
-    let { page, limit } = request.query
+    let { page, limit, sort } = request.query
     page === undefined ? page = 1 : page = parseInt(page)
     limit === undefined ? limit = 3 : limit = parseInt(limit)
-    console.log(page)
-    console.log(limit)
+    if (sort === undefined) {
+      sort = 'history_id'
+    }
     const totalData = await getHistoryCount()
-    console.log(totalData)
     const totalPage = Math.ceil(totalData / limit)
     const offset = page * limit - limit
     const prevLink = getPrevLink(page, request.query)
@@ -61,11 +61,11 @@ module.exports = {
       nextLink: nextLink && `http://127.0.0.1:3001/history?${nextLink}`
     }
     try {
-      const result = await getAllHistory(limit, offset)
+      const result = await getAllHistory(limit, offset, sort)
       if (result.length > 0) {
-        return helper.response(response, 200, 'Success Get Product', result, pageInfo)
+        return helper.response(response, 200, 'Success Get History', result, pageInfo)
       } else {
-        return helper.response(response, 404, 'Product not found', result, pageInfo)
+        return helper.response(response, 404, 'History not found', result, pageInfo)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
