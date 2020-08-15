@@ -4,11 +4,10 @@ const connection = require('../config/mysql')
 module.exports = {
   getProduct: (search, sort, limit, offset) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
-      product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
-      product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id 
-      WHERE product.product_name LIKE ? ORDER BY ${sort} LIMIT ? OFFSET ?`, [`%${search}%`, limit, offset],
-      (error, result) => {
+      connection.query(`SELECT product.product_id, product.product_name, product.product_image, product.product_price, 
+      category.category_name, product.product_created_at, product.product_updated_at, product.product_status FROM product 
+      INNER JOIN category ON product.category_id = category.category_id WHERE product.product_name LIKE ? 
+      ORDER BY ${sort} LIMIT ? OFFSET ?`, [`%${search}%`, limit, offset], (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
     })
@@ -22,10 +21,9 @@ module.exports = {
   },
   getProductById: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
-      product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
-      product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id 
-      WHERE product_id = ?`, id, (error, result) => {
+      connection.query(`SELECT product.product_id, product.product_name, product.product_image, product.product_price, 
+      category.category_name, product.product_created_at, product.product_updated_at, product.product_status FROM product 
+      INNER JOIN category ON product.category_id = category.category_id WHERE product_id = ?`, id, (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
     })
@@ -36,50 +34,6 @@ module.exports = {
         (error, result) => {
           !error ? resolve(result[0].total) : reject(new Error(error))
         })
-    })
-  },
-  getProductNameSorted: () => {
-    return new Promise((resolve, reject) => {
-      connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
-      product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
-      product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id
-      ORDER BY product.product_name ASC`,
-      (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
-    })
-  },
-  getProductCategorySorted: () => {
-    return new Promise((resolve, reject) => {
-      connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
-      product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
-      product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id
-      ORDER BY category.category_name ASC`,
-      (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
-    })
-  },
-  getProductDateSorted: () => {
-    return new Promise((resolve, reject) => {
-      connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
-      product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
-      product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id
-      ORDER BY product.product_created_at DESC`,
-      (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
-    })
-  },
-  getProductPriceSorted: () => {
-    return new Promise((resolve, reject) => {
-      connection.query(`SELECT product.product_id, product.product_name, product.product_image, 
-      product.product_price, category.category_name, product.product_created_at, product.product_updated_at, 
-      product.product_status FROM product INNER JOIN category ON product.category_id = category.category_id
-      ORDER BY product.product_price ASC`,
-      (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
     })
   },
   postProduct: (setData) => {
@@ -123,13 +77,6 @@ module.exports = {
         } else {
           reject(new Error(error))
         }
-      })
-    })
-  },
-  testProduct: (sort) => {
-    return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM product ORDER BY ?', `${sort}`, (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
       })
     })
   }

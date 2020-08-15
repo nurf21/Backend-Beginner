@@ -85,7 +85,7 @@ module.exports = {
       }
       return helper.response(response, 200, 'Order Added', checkout)
     } catch (error) {
-      console.log(error)
+      return helper.response(response, 400, 'Bad Request', error)
     }
   }
 }

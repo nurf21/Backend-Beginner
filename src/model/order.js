@@ -22,8 +22,8 @@ module.exports = {
   },
   getOrderByHistoryId: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT orders.order_id, product.product_name, product.product_price,
-      orders.order_qty, orders.order_total_price FROM orders INNER JOIN product ON orders.product_id = product.product_id 
+      connection.query(`SELECT orders.order_id, product.product_name, product.product_price, orders.order_qty, 
+      orders.order_total_price FROM orders INNER JOIN product ON orders.product_id = product.product_id 
       INNER JOIN history ON history.history_id = orders.history_id WHERE orders.history_id = ?`, id, (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
