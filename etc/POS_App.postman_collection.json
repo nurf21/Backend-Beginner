@@ -9,12 +9,12 @@
 			"name": "PRODUCT",
 			"item": [
 				{
-					"name": "GET_ALL_PRODUCT",
+					"name": "GET_PRODUCT",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product",
+							"raw": "http://127.0.0.1:3001/product?page=1&limit=3",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -25,6 +25,26 @@
 							"port": "3001",
 							"path": [
 								"product"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								},
+								{
+									"key": "search",
+									"value": "black",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "product_created_at%20DESC",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -36,7 +56,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/2",
+							"raw": "http://127.0.0.1:3001/product/10",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -47,7 +67,7 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"2"
+								"10"
 							]
 						}
 					},
@@ -63,7 +83,7 @@
 							"urlencoded": [
 								{
 									"key": "product_name",
-									"value": "Espresso",
+									"value": "Wiener Schnitzel",
 									"type": "text"
 								},
 								{
@@ -73,12 +93,12 @@
 								},
 								{
 									"key": "product_price",
-									"value": "10000",
+									"value": "69000",
 									"type": "text"
 								},
 								{
 									"key": "category_id",
-									"value": "1",
+									"value": "4",
 									"type": "text"
 								},
 								{
@@ -115,7 +135,7 @@
 							"urlencoded": [
 								{
 									"key": "product_name",
-									"value": "Coffee Latte",
+									"value": "Choco Rum",
 									"type": "text"
 								},
 								{
@@ -125,12 +145,12 @@
 								},
 								{
 									"key": "product_price",
-									"value": "15000",
+									"value": "28000",
 									"type": "text"
 								},
 								{
 									"key": "category_id",
-									"value": "1",
+									"value": "3",
 									"type": "text"
 								},
 								{
@@ -141,7 +161,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/2",
+							"raw": "http://127.0.0.1:3001/product/6",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -152,7 +172,7 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"2"
+								"6"
 							]
 						}
 					},
@@ -215,7 +235,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/category/2",
+							"raw": "http://127.0.0.1:3001/category/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -226,7 +246,7 @@
 							"port": "3001",
 							"path": [
 								"category",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -242,7 +262,7 @@
 							"urlencoded": [
 								{
 									"key": "category_name",
-									"value": "Drinks",
+									"value": "Foods",
 									"type": "text"
 								}
 							]
@@ -274,13 +294,13 @@
 							"urlencoded": [
 								{
 									"key": "category_name",
-									"value": "Desserts",
+									"value": "Others",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3001/category/2",
+							"raw": "http://127.0.0.1:3001/category/6",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -291,7 +311,7 @@
 							"port": "3001",
 							"path": [
 								"category",
-								"2"
+								"6"
 							]
 						}
 					},
@@ -303,7 +323,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/category/2",
+							"raw": "http://127.0.0.1:3001/category/6",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -314,7 +334,7 @@
 							"port": "3001",
 							"path": [
 								"category",
-								"2"
+								"6"
 							]
 						}
 					},
@@ -347,6 +367,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GET_HISTORY_BY_ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3001/history/51",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"history",
+								"51"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -359,6 +409,60 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3001/order",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ORDER_BY_ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3001/order/58",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"order",
+								"58"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST_ORDER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orders\": [\r\n        {\r\n            \"product_id\": 3,\r\n            \"qty\": 2\r\n        },\r\n        {\r\n            \"product_id\": 1,\r\n            \"qty\": 3\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://127.0.0.1:3001/order",
 							"protocol": "http",
