@@ -2,12 +2,19 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-  getAllOrder: () => {
+  getAllOrder: (sort, limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(`SELECT orders.order_id, orders.history_id, product.product_name, product.product_price,
-      orders.order_qty, orders.order_total_price FROM orders JOIN product ON orders.product_id = product.product_id`,
-      (error, result) => {
+      orders.order_qty, orders.order_total_price FROM orders JOIN product ON orders.product_id = product.product_id
+      ORDER BY ${sort} LIMIT ? OFFSET ?`, [limit, offset], (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
+      })
+    })
+  },
+  getOrderCount: () => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT COUNT(*) as total FROM orders', (error, result) => {
+        !error ? resolve(result[0].total) : reject(new Error(error))
       })
     })
   },

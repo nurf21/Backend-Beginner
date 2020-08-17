@@ -1,6 +1,7 @@
 // Import object from model
 const {
   getAllOrder,
+  getOrderCount,
   getOrderById,
   getOrderByHistoryId,
   postOrder
@@ -12,17 +13,64 @@ const {
 } = require('../model/history')
 const { getProductById } = require('../model/product')
 
+// Import query string
+const qs = require('querystring')
+
 // Import helper
 const helper = require('../helper')
 
+// Pagination
+const getPrevLink = (page, currentQuery) => {
+  if (page > 1) {
+    const generatePage = {
+      page: page - 1
+    }
+    const resultPrevLink = { ...currentQuery, ...generatePage }
+    return qs.stringify(resultPrevLink)
+  } else {
+    return null
+  }
+}
+
+const getNextLink = (page, totalPage, currentQuery) => {
+  if (page < totalPage) {
+    const generatePage = {
+      page: page + 1
+    }
+    const resultPrevLink = { ...currentQuery, ...generatePage }
+    return qs.stringify(resultPrevLink)
+  } else {
+    return null
+  }
+}
+
 module.exports = {
   getAllOrder: async (request, response) => {
+    let { page, limit, sort } = request.query
+    page === undefined ? page = 1 : page = parseInt(page)
+    limit === undefined ? limit = 3 : limit = parseInt(limit)
+    const totalData = await getOrderCount()
+    if (sort === undefined) {
+      sort = 'order_id'
+    }
+    const totalPage = Math.ceil(totalData / limit)
+    const offset = page * limit - limit
+    const prevLink = getPrevLink(page, request.query)
+    const nextLink = getNextLink(page, totalPage, request.query)
+    const pageInfo = {
+      page,
+      totalPage,
+      limit,
+      totalData,
+      prevLink: prevLink && `http://127.0.0.1:3001/product?${prevLink}`,
+      nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`
+    }
     try {
-      const result = await getAllOrder()
+      const result = await getAllOrder(sort, limit, offset)
       if (result.length > 0) {
-        return helper.response(response, 200, 'Get Order Success', result)
+        return helper.response(response, 200, 'Get Order Success', result, pageInfo)
       } else {
-        return helper.response(response, 404, 'Order Not Found', result)
+        return helper.response(response, 404, 'Order Not Found', result, pageInfo)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
