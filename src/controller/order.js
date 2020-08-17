@@ -62,8 +62,8 @@ module.exports = {
       totalPage,
       limit,
       totalData,
-      prevLink: prevLink && `http://127.0.0.1:3001/product?${prevLink}`,
-      nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`
+      prevLink: prevLink && `http://127.0.0.1:3001/order?${prevLink}`,
+      nextLink: nextLink && `http://127.0.0.1:3001/order?${nextLink}`
     }
     try {
       const result = await getAllOrder(sort, limit, offset)
