@@ -42,9 +42,9 @@ const getNextLink = (page, totalPage, currentQuery) => {
 module.exports = {
   getAllHistory: async (request, response) => {
     let { page, limit, sort } = request.query
-    page === undefined ? page = 1 : page = parseInt(page)
-    limit === undefined ? limit = 3 : limit = parseInt(limit)
-    if (sort === undefined) {
+    page === undefined || page === '' ? page = 1 : page = parseInt(page)
+    limit === undefined || limit === '' ? limit = 3 : limit = parseInt(limit)
+    if (sort === undefined || sort === '') {
       sort = 'history_id'
     }
     const totalData = await getHistoryCount()

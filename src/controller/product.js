@@ -43,8 +43,8 @@ const getNextLink = (page, totalPage, currentQuery) => {
 module.exports = {
   getProduct: async (request, response) => {
     let { page, limit, search, sort } = request.query
-    page === undefined ? page = 1 : page = parseInt(page)
-    limit === undefined ? limit = 3 : limit = parseInt(limit)
+    page === undefined || page === '' ? page = 1 : page = parseInt(page)
+    limit === undefined || limit === '' ? limit = 3 : limit = parseInt(limit)
     let totalData = 0
     if (search === undefined) {
       search = ''
@@ -52,7 +52,7 @@ module.exports = {
     } else {
       totalData = await getProductCountByName(search)
     }
-    if (sort === undefined) {
+    if (sort === undefined || sort === '') {
       sort = 'product_id'
     }
     const totalPage = Math.ceil(totalData / limit)

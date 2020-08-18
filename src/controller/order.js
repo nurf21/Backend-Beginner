@@ -47,10 +47,10 @@ const getNextLink = (page, totalPage, currentQuery) => {
 module.exports = {
   getAllOrder: async (request, response) => {
     let { page, limit, sort } = request.query
-    page === undefined ? page = 1 : page = parseInt(page)
-    limit === undefined ? limit = 3 : limit = parseInt(limit)
+    page === undefined || page === '' ? page = 1 : page = parseInt(page)
+    limit === undefined || limit === '' ? limit = 3 : limit = parseInt(limit)
     const totalData = await getOrderCount()
-    if (sort === undefined) {
+    if (sort === undefined || sort === '') {
       sort = 'order_id'
     }
     const totalPage = Math.ceil(totalData / limit)
