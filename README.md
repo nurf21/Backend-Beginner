@@ -1,6 +1,6 @@
 <h1 align="center">ExpressJS - Cazzy RESTfull API</h1>
 
-This project is a backend to my previous project, Cazzy POS App. Its main purpose is to make cafe or shop owner easier to checkout and manage datas in database. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+This project is a backend to my project, Cazzy POS App. Its main purpose is to make cafe or shop owner easier to checkout and manage datas in database. [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 

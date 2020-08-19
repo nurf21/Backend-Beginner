@@ -62,11 +62,16 @@ module.exports = {
     }
     try {
       const result = await getAllHistory(limit, offset, sort)
-      if (result.length > 0) {
-        return helper.response(response, 200, 'Success Get History', result, pageInfo)
-      } else {
-        return helper.response(response, 404, 'History not found', result, pageInfo)
+      for (let i = 0; i < result.length; i++) {
+        result[i].orders = await getOrderByHistoryId(result[i].history_id)
+        let total = 0
+        result[i].orders.forEach(value => {
+          total += value.order_total_price
+        })
+        const tax = total * 10 / 100
+        result[i].tax = tax
       }
+      return helper.response(response, 200, 'Success Get History', result, pageInfo)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
