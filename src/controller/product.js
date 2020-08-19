@@ -121,7 +121,7 @@ module.exports = {
       }
       const categoryId = request.body.category_id
       if (categoryId === '') {
-        return helper.response(response, 400, 'category id cannot be empty')
+        return helper.response(response, 400, 'Category id cannot be empty')
       }
       const productStatus = request.body.product_status
       if (productStatus === '') {
@@ -158,7 +158,7 @@ module.exports = {
       }
       const categoryId = request.body.category_id
       if (categoryId === '') {
-        return helper.response(response, 400, 'category id cannot be empty')
+        return helper.response(response, 400, 'Category id cannot be empty')
       }
       const productStatus = request.body.product_status
       if (productStatus === '') {

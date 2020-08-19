@@ -39,6 +39,9 @@ module.exports = {
   postCategory: async (request, response) => {
     try {
       const categoryName = request.body.category_name
+      if (categoryName === '') {
+        return helper.response(response, 201, 'Category name cannot be empty')
+      }
       const setData = {
         category_name: categoryName,
         category_created_at: new Date()
@@ -53,6 +56,9 @@ module.exports = {
     try {
       const { id } = request.params
       const categoryName = request.body.category_name
+      if (categoryName === '') {
+        return helper.response(response, 201, 'Category name cannot be empty')
+      }
       const setData = {
         category_name: categoryName,
         category_updated_at: new Date()
