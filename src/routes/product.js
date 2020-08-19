@@ -4,6 +4,7 @@ const router = require('express').Router()
 // Import object dari controller
 const {
   getProduct,
+  getProductByName,
   getProductById,
   postProduct,
   patchProduct,
@@ -12,6 +13,7 @@ const {
 
 // [GET]
 router.get('/', getProduct)
+router.get('/search', getProductByName)
 router.get('/:id', getProductById)
 
 // [POST]

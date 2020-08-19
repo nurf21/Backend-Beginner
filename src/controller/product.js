@@ -2,6 +2,7 @@
 const {
   getProduct,
   getProductCount,
+  getProductByName,
   getProductCountByName,
   getProductById,
   postProduct,
@@ -42,16 +43,10 @@ const getNextLink = (page, totalPage, currentQuery) => {
 
 module.exports = {
   getProduct: async (request, response) => {
-    let { page, limit, search, sort } = request.query
+    let { page, limit, sort } = request.query
     page === undefined || page === '' ? page = 1 : page = parseInt(page)
-    limit === undefined || limit === '' ? limit = 3 : limit = parseInt(limit)
-    let totalData = 0
-    if (search === undefined) {
-      search = ''
-      totalData = await getProductCount()
-    } else {
-      totalData = await getProductCountByName(search)
-    }
+    limit === undefined || limit === '' ? limit = 9 : limit = parseInt(limit)
+    const totalData = await getProductCount()
     if (sort === undefined || sort === '') {
       sort = 'product_id'
     }
@@ -68,11 +63,30 @@ module.exports = {
       nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`
     }
     try {
-      const result = await getProduct(search, sort, limit, offset)
+      const result = await getProduct(sort, limit, offset)
       if (result.length > 0) {
         return helper.response(response, 200, 'Success Get Product', result, pageInfo)
       } else {
         return helper.response(response, 404, 'Product not found', result, pageInfo)
+      }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getProductByName: async (request, response) => {
+    const { keyword } = request.query
+    const limit = 100
+    const totalData = await getProductCountByName(keyword)
+    try {
+      const searchResult = await getProductByName(keyword, limit)
+      const result = {
+        searchResult,
+        totalData
+      }
+      if (searchResult.length > 0) {
+        return helper.response(response, 200, 'Success Get Product', result)
+      } else {
+        return helper.response(response, 404, 'Product not found', result)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

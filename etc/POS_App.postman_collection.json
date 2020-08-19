@@ -38,14 +38,38 @@
 									"disabled": true
 								},
 								{
-									"key": "search",
-									"value": "a",
-									"disabled": true
-								},
-								{
 									"key": "sort",
-									"value": "product_created_at%20DESC",
+									"value": "product_created_at DESC",
 									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_PRODUCT_BY_NAME",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3001/product/search?keyword=atte",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"product",
+								"search"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "atte"
 								}
 							]
 						}
@@ -379,7 +403,7 @@
 								},
 								{
 									"key": "sort",
-									"value": "history_created_at%20DESC",
+									"value": "history_created_at DESC",
 									"disabled": true
 								}
 							]
@@ -429,7 +453,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/order?page=1&limit=5",
+							"raw": "http://127.0.0.1:3001/order",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -444,15 +468,17 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "limit",
-									"value": "5"
+									"value": "5",
+									"disabled": true
 								},
 								{
 									"key": "sort",
-									"value": "order_id%20DESC",
+									"value": "order_id DESC",
 									"disabled": true
 								}
 							]
