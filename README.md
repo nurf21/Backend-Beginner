@@ -41,7 +41,10 @@ DB_NAME=pos_app   // Database name
 **1. GET**
 
 - `/product`(Get all product)
-  - `{ "page": 1, "limit": 3, "search": "Latte" , "sort" : "product_price DESC" }`
+  - `{ "page": 1, "limit": 3, "sort" : "product_price DESC" }`
+
+- `/product/search` (Get product by name)
+  - `{ "keyword": "latte" }`
 
 - `/product/:id`(Get product by id)
 
