@@ -145,10 +145,25 @@ module.exports = {
     try {
       const { id } = request.params
       const productName = request.body.product_name
+      if (productName === '') {
+        return helper.response(response, 400, 'Product name cannot be empty')
+      }
       const productImg = request.body.product_image
+      if (productImg === '') {
+        return helper.response(response, 400, 'Product image cannot be empty')
+      }
       const productPrice = request.body.product_price
+      if (productPrice === '') {
+        return helper.response(response, 400, 'Product price cannot be empty')
+      }
       const categoryId = request.body.category_id
+      if (categoryId === '') {
+        return helper.response(response, 400, 'category id cannot be empty')
+      }
       const productStatus = request.body.product_status
+      if (productStatus === '') {
+        return helper.response(response, 400, 'Product status cannot be empty')
+      }
       const setData = {
         product_name: productName,
         product_image: productImg,
