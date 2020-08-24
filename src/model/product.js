@@ -5,7 +5,7 @@ module.exports = {
   getProduct: (sort, limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(`SELECT product.product_id, product.product_name, product.product_image, product.product_price, 
-      category.category_name, product.product_created_at, product.product_updated_at, product.product_status FROM product 
+      category.category_id, category.category_name, product.product_created_at, product.product_updated_at, product.product_status FROM product 
       INNER JOIN category ON product.category_id = category.category_id ORDER BY ${sort} LIMIT ? OFFSET ?`,
       [limit, offset], (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
