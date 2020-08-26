@@ -98,7 +98,7 @@ module.exports = {
       }
       const result = await postHistory(setData)
       const historyId = result.insertId
-      const dataOrder = request.body.orders
+      const dataOrder = request.body
       let subTotal = 0
       for (let i = 0; i < dataOrder.length; i++) {
         const productId = dataOrder[i].product_id
