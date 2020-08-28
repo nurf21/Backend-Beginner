@@ -1,7 +1,14 @@
 // Import object from model
 const {
   getAllHistory,
+  getHistoryToday,
+  getHistoryWeek,
+  getHistoryMonth,
   getHistoryCount,
+  getSumChart,
+  getTotalIncome,
+  getTotalIncomeYear,
+  getCountHistoryWeek,
   getHistoryById
 } = require('../model/history')
 const {
@@ -13,6 +20,7 @@ const qs = require('querystring')
 
 // Import helper
 const helper = require('../helper')
+const { response } = require('../helper')
 
 // Pagination
 const getPrevLink = (page, currentQuery) => {
@@ -43,7 +51,7 @@ module.exports = {
   getAllHistory: async (request, response) => {
     let { page, limit, sort } = request.query
     page === undefined || page === '' ? page = 1 : page = parseInt(page)
-    limit === undefined || limit === '' ? limit = 3 : limit = parseInt(limit)
+    limit === undefined || limit === '' ? limit = 100 : limit = parseInt(limit)
     if (sort === undefined || sort === '') {
       sort = 'history_id'
     }
@@ -76,6 +84,57 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
+  getHistoryToday: async (request, response) => {
+    try {
+      const result = await getHistoryToday()
+      for (let i = 0; i < result.length; i++) {
+        result[i].orders = await getOrderByHistoryId(result[i].history_id)
+        let total = 0
+        result[i].orders.forEach(value => {
+          total += value.order_total_price
+        })
+        const tax = total * 10 / 100
+        result[i].tax = tax
+      }
+      return helper.response(response, 200, 'Success Get History', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getHistoryWeek: async (request, response) => {
+    try {
+      const result = await getHistoryWeek()
+      for (let i = 0; i < result.length; i++) {
+        result[i].orders = await getOrderByHistoryId(result[i].history_id)
+        let total = 0
+        result[i].orders.forEach(value => {
+          total += value.order_total_price
+        })
+        const tax = total * 10 / 100
+        result[i].tax = tax
+      }
+      return helper.response(response, 200, 'Success Get History', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getHistoryMonth: async (request, response) => {
+    try {
+      const result = await getHistoryMonth()
+      for (let i = 0; i < result.length; i++) {
+        result[i].orders = await getOrderByHistoryId(result[i].history_id)
+        let total = 0
+        result[i].orders.forEach(value => {
+          total += value.order_total_price
+        })
+        const tax = total * 10 / 100
+        result[i].tax = tax
+      }
+      return helper.response(response, 200, 'Success Get History', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
   getHistoryById: async (request, response) => {
     try {
       const { id } = request.params
@@ -95,6 +154,46 @@ module.exports = {
         history_created_at: dataHistory[0].history_created_at
       }
       return helper.response(response, 200, `Get History id: ${id} Success`, result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getSumChart: async (request, response) => {
+    try {
+      const { date } = request.query
+      const result = await getSumChart(date)
+      if (result.length > 0) {
+        return helper.response(response, 200, `Get Sum Success`, result)
+      } else {
+        return helper.response(response, 200, `Get Sum Success`, [])
+      }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getTotalIncome: async (request, response) => {
+    try {
+      const { date } = request.query
+      const result = await getTotalIncome(date)
+      return helper.response(response, 200, `Get total income ${date} Success`, result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getTotalIncomeYear: async (request, response) => {
+    try {
+      const { date } = request.query
+      const result = await getTotalIncomeYear(date)
+      return helper.response(response, 200, `Get total income year Success`, result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getCountHistoryWeek: async (request, response) => {
+    try {
+      const { date } = request.query
+      const result = await getCountHistoryWeek(date)
+      return helper.response(response, 200, 'Get count history Success', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
