@@ -1,16 +1,6 @@
 // Import object from model
-const {
-  getAllOrder,
-  getOrderCount,
-  getOrderById,
-  getOrderByHistoryId,
-  postOrder
-} = require('../model/order')
-const {
-  getHistoryById,
-  postHistory,
-  patchHistory
-} = require('../model/history')
+const { getAllOrder, getOrderCount, getOrderById, getOrderByHistoryId, postOrder } = require('../model/order')
+const { getHistoryById, postHistory, patchHistory } = require('../model/history')
 const { getProductById } = require('../model/product')
 
 // Import query string
@@ -18,6 +8,9 @@ const qs = require('querystring')
 
 // Import helper
 const helper = require('../helper')
+
+const redis = require('redis')
+const client = redis.createClient()
 
 // Pagination
 const getPrevLink = (page, currentQuery) => {
@@ -67,6 +60,7 @@ module.exports = {
     }
     try {
       const result = await getAllOrder(sort, limit, offset)
+      client.setex(`order:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(response, 200, 'Get Order Success', result, pageInfo)
       } else {
@@ -80,6 +74,7 @@ module.exports = {
     try {
       const { id } = request.params
       const result = await getOrderById(id)
+      client.setex(`orderid:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(response, 200, `Get Order id: ${id} Success`, result)
       } else {

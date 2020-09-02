@@ -61,24 +61,11 @@ module.exports = {
     }
     try {
       const result = await getProduct(sort, limit, offset)
-      // proses set data result ke dalam redis
-      client.set(`getproduct:${JSON.stringify(request.query)}`, JSON.stringify(result))
+      client.setex(`product:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
-        return helper.response(
-          response,
-          200,
-          'Success Get Product',
-          result,
-          pageInfo
-        )
+        return helper.response(response, 200, 'Success Get Product', result, pageInfo)
       } else {
-        return helper.response(
-          response,
-          404,
-          'Product not found',
-          result,
-          pageInfo
-        )
+        return helper.response(response, 404, 'Product not found', result, pageInfo)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -94,6 +81,7 @@ module.exports = {
         searchResult,
         totalData
       }
+      client.setex(`searchproduct:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       if (searchResult.length > 0) {
         return helper.response(response, 200, 'Success Get Product', result)
       } else {
@@ -107,16 +95,11 @@ module.exports = {
     try {
       const { id } = request.params
       const result = await getProductById(id)
-      client.setex(`getproductbyid:${id}`, 3600, JSON.stringify(result))
+      client.setex(`productid:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(response, 200, 'Get Product Success', result)
       } else {
-        return helper.response(
-          response,
-          404,
-          `Product by id: ${id} not found`,
-          result
-        )
+        return helper.response(response, 404, `Product by id: ${id} not found`, result)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

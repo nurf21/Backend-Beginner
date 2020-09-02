@@ -1,25 +1,15 @@
 // Import object from model
-const {
-  getAllHistory,
-  getHistoryToday,
-  getHistoryWeek,
-  getHistoryMonth,
-  getHistoryCount,
-  getSumChart,
-  getTotalIncome,
-  getTotalIncomeYear,
-  getCountHistoryWeek,
-  getHistoryById
-} = require('../model/history')
-const {
-  getOrderByHistoryId
-} = require('../model/order')
+const { getAllHistory, getHistoryToday, getHistoryWeek, getHistoryMonth, getHistoryCount, getSumChart, getTotalIncome, getTotalIncomeYear, getCountHistoryWeek, getHistoryById } = require('../model/history')
+const { getOrderByHistoryId } = require('../model/order')
 
 // Import query string
 const qs = require('querystring')
 
 // Import helper
 const helper = require('../helper')
+
+const redis = require('redis')
+const client = redis.createClient()
 
 // Pagination
 const getPrevLink = (page, currentQuery) => {
@@ -78,6 +68,7 @@ module.exports = {
         const tax = total * 10 / 100
         result[i].tax = tax
       }
+      client.setex(`history:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       return helper.response(response, 200, 'Success Get History', result, pageInfo)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -152,6 +143,7 @@ module.exports = {
         subtotal: dataHistory[0].history_subtotal,
         history_created_at: dataHistory[0].history_created_at
       }
+      client.setex(`historyid:${id}`, 3600, JSON.stringify(result))
       return helper.response(response, 200, `Get History id: ${id} Success`, result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

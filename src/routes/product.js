@@ -6,21 +6,21 @@ const { getProduct, getProductByName, getProductById, postProduct, patchProduct,
 
 // Import middleware
 const { authorGeneral, authorAdmin } = require('../middleware/auth')
-const { getProductByIdRedis, clearDataProductRedis } = require('../middleware/redis')
+const { productRedis, searchProductRedis, productIdRedis, clearRedis } = require('../middleware/redis')
 const upload = require('../middleware/multer')
 
 // [GET]
-router.get('/', authorGeneral, getProduct)
-router.get('/search', authorGeneral, getProductByName)
-router.get('/:id', authorGeneral, getProductByIdRedis, getProductById)
+router.get('/', authorGeneral, productRedis, getProduct)
+router.get('/search', authorGeneral, searchProductRedis, getProductByName)
+router.get('/:id', authorGeneral, productIdRedis, getProductById)
 
 // [POST]
-router.post('/', authorAdmin, upload.single('product_image'), postProduct)
+router.post('/', authorAdmin, upload.single('product_image'), clearRedis, postProduct)
 
 // [PATCH]
-router.patch('/:id', authorAdmin, upload.single('product_image'), clearDataProductRedis, patchProduct)
+router.patch('/:id', authorAdmin, upload.single('product_image'), clearRedis, patchProduct)
 
 // [DELETE]
-router.delete('/:id', authorAdmin, clearDataProductRedis, deleteProduct)
+router.delete('/:id', authorAdmin, clearRedis, deleteProduct)
 
 module.exports = router

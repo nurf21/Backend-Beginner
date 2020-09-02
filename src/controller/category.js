@@ -1,19 +1,17 @@
 // Import object from model
-const {
-  getAllCategory,
-  getCategoryById,
-  postCategory,
-  patchCategory,
-  deleteCategory
-} = require('../model/category')
+const { getAllCategory, getCategoryById, postCategory, patchCategory, deleteCategory } = require('../model/category')
 
 // Import helper
 const helper = require('../helper')
+
+const redis = require('redis')
+const client = redis.createClient()
 
 module.exports = {
   getAllCategory: async (request, response) => {
     try {
       const result = await getAllCategory()
+      client.setex('category', 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(response, 200, 'Get All Category Success', result)
       } else {
@@ -27,6 +25,7 @@ module.exports = {
     try {
       const { id } = request.params
       const result = await getCategoryById(id)
+      client.setex(`categoryid:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(response, 200, `Get Category id: ${id} Success`, result)
       } else {
