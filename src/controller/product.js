@@ -1,14 +1,5 @@
 // Import object from model
-const {
-  getProduct,
-  getProductCount,
-  getProductByName,
-  getProductCountByName,
-  getProductById,
-  postProduct,
-  patchProduct,
-  deleteProduct
-} = require('../model/product')
+const { getProduct, getProductCount, getProductByName, getProductCountByName, getProductById, postProduct, patchProduct, deleteProduct } = require('../model/product')
 
 // Import query string
 const qs = require('querystring')
@@ -132,7 +123,7 @@ module.exports = {
   },
   postProduct: async (request, response) => {
     try {
-      console.log(request.file)
+      // console.log(request.file)
       const productName = request.body.product_name
       if (productName === '') {
         return helper.response(response, 400, 'Product name cannot be empty')

@@ -4,22 +4,10 @@ const router = require('express').Router()
 // Import object from controller
 const { getProduct, getProductByName, getProductById, postProduct, patchProduct, deleteProduct } = require('../controller/product')
 
-// Import auth and redis
+// Import middleware
 const { authorGeneral, authorAdmin } = require('../middleware/auth')
 const { getProductByIdRedis, clearDataProductRedis } = require('../middleware/redis')
-
-const multer = require('multer')
-
-const storage = multer.diskStorage({
-  destination: (request, file, callback) => {
-    callback(null, './uploads')
-  },
-  filename: (request, file, callback) => {
-    // console.log(file)
-    callback(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname)
-  }
-})
-const upload = multer({ storage: storage })
+const upload = require('../middleware/multer')
 
 // [GET]
 router.get('/', authorGeneral, getProduct)
