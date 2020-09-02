@@ -1,15 +1,12 @@
 const bcrypt = require('bcrypt')
-const helper = require('../helper')
 const jwt = require('jsonwebtoken')
+const helper = require('../helper')
 const { postUser, checkUser } = require('../model/users')
 
 module.exports = {
   registerUser: async (request, response) => {
     const salt = bcrypt.genSaltSync(10)
     const encryptPassword = bcrypt.hashSync(request.body.user_password, salt)
-    // console.log(`Password : ${user_password}`)
-    // console.log(`Password Bcrypt : ${encryptPassword}`)
-    // kondisi jika emailnya sama tidak bisa
     const setData = {
       user_email: request.body.user_email,
       user_password: encryptPassword,
@@ -19,8 +16,19 @@ module.exports = {
       user_created_at: new Date()
     }
     try {
-      const result = await postUser(setData)
-      return helper.response(response, 200, 'Register Success', result)
+      const checkEmail = await checkUser(setData.user_email)
+      if (setData.user_email === '' || setData.user_email.search('@') < 0) {
+        return helper.response(response, 400, 'Email cannot be empty and must be a valid email')
+      } else if (checkEmail.length > 0) {
+        return helper.response(response, 400, 'Email is already registered')
+      } else if (request.body.user_password.length < 8 || request.body.user_password.length > 16) {
+        return helper.response(response, 400, 'Password must be 8-16 characters')
+      } else if (setData.user_name === '') {
+        return helper.response(response, 400, 'Name cannot be empty')
+      } else {
+        const result = await postUser(setData)
+        return helper.response(response, 200, 'Register Success', result)
+      }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request')
     }
