@@ -35,15 +35,10 @@ module.exports = {
   },
   loginUser: async (request, response) => {
     try {
-      // const { user_email, user_password } = request.body
-      // console.log(user_email)
       const checkDataUser = await checkUser(request.body.user_email)
       if (checkDataUser.length >= 1) {
-        // proses 2 = cek password
         const checkPassword = bcrypt.compareSync(request.body.user_password, checkDataUser[0].user_password)
         if (checkPassword) {
-          // proses 3 = set JWT
-          // const {user_id, user_email, user_name, user_role, user_status} = checkDataUser[0]
           let payload = {
             user_id: checkDataUser[0].user_id,
             user_email: checkDataUser[0].user_email,
@@ -51,14 +46,18 @@ module.exports = {
             user_role: checkDataUser[0].user_role,
             user_status: checkDataUser[0].user_status
           }
-          const token = jwt.sign(payload, 'SECRET', { expiresIn: '1h' })
-          payload = { ...payload, token }
-          return helper.response(response, 200, 'Login Success!', payload)
+          if (payload.user_status === 0) {
+            return helper.response(response, 400, 'Your account is already registered but not activated, please contact admin first')
+          } else {
+            const token = jwt.sign(payload, 'SECRET', { expiresIn: '24h' })
+            payload = { ...payload, token }
+            return helper.response(response, 200, 'Login Success', payload)
+          }
         } else {
           return helper.response(response, 400, 'Wrong Password')
         }
       } else {
-        return helper.response(response, 400, 'Email is not registed')
+        return helper.response(response, 400, 'Email is not registeredd')
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request')
