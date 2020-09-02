@@ -20,7 +20,6 @@ const qs = require('querystring')
 
 // Import helper
 const helper = require('../helper')
-const { response } = require('../helper')
 
 // Pagination
 const getPrevLink = (page, currentQuery) => {
@@ -163,9 +162,9 @@ module.exports = {
       const { date } = request.query
       const result = await getSumChart(date)
       if (result.length > 0) {
-        return helper.response(response, 200, `Get Sum Success`, result)
+        return helper.response(response, 200, 'Get Sum Success', result)
       } else {
-        return helper.response(response, 200, `Get Sum Success`, [])
+        return helper.response(response, 200, 'Get Sum Success', [])
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -184,7 +183,7 @@ module.exports = {
     try {
       const { date } = request.query
       const result = await getTotalIncomeYear(date)
-      return helper.response(response, 200, `Get total income year Success`, result)
+      return helper.response(response, 200, 'Get total income year Success', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
