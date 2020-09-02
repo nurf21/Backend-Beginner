@@ -18,7 +18,7 @@ router.get('/:id', authorGeneral, getProductByIdRedis, getProductById)
 router.post('/', authorAdmin, upload.single('product_image'), postProduct)
 
 // [PATCH]
-router.patch('/:id', authorAdmin, clearDataProductRedis, patchProduct)
+router.patch('/:id', authorAdmin, upload.single('product_image'), clearDataProductRedis, patchProduct)
 
 // [DELETE]
 router.delete('/:id', authorAdmin, clearDataProductRedis, deleteProduct)

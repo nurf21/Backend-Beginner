@@ -7,6 +7,7 @@ const qs = require('querystring')
 // Import helper
 const helper = require('../helper')
 
+const fs = require('fs')
 const redis = require('redis')
 const client = redis.createClient()
 
@@ -123,36 +124,26 @@ module.exports = {
   },
   postProduct: async (request, response) => {
     try {
-      // console.log(request.file)
-      const productName = request.body.product_name
-      if (productName === '') {
-        return helper.response(response, 400, 'Product name cannot be empty')
-      }
-      const productImg = request.body.product_image
-      if (productImg === '') {
-        return helper.response(response, 400, 'Product image cannot be empty')
-      }
-      const productPrice = request.body.product_price
-      if (productPrice === '') {
-        return helper.response(response, 400, 'Product price cannot be empty')
-      }
-      const categoryId = request.body.category_id
-      if (categoryId === '') {
-        return helper.response(response, 400, 'Category id cannot be empty')
-      }
-      const productStatus = request.body.product_status
-      if (productStatus === '') {
-        return helper.response(response, 400, 'Product status cannot be empty')
-      }
       const setData = {
-        product_name: productName,
+        product_name: request.body.product_name,
         product_image: request.file === undefined ? '' : request.file.filename,
-        product_price: productPrice,
-        category_id: categoryId,
+        product_price: request.body.product_price,
+        category_id: request.body.category_id,
         product_created_at: new Date(),
-        product_status: productStatus
+        product_status: request.body.product_status
       }
-      // console.log(setData)
+      if (setData.product_name === '') {
+        return helper.response(response, 400, 'Name cannot be empty')
+      } else if (setData.product_image === '') {
+        setData.product_image = 'blank-product.jpg'
+      }
+      if (setData.product_price === '') {
+        return helper.response(response, 400, 'Price cannot be empty')
+      } else if (setData.category_id === '') {
+        return helper.response(response, 400, 'Please select category')
+      } else if (setData.product_status === '') {
+        return helper.response(response, 400, 'Please select status')
+      }
       const result = await postProduct(setData)
       return helper.response(response, 201, 'Product Added', result)
     } catch (error) {
@@ -162,38 +153,36 @@ module.exports = {
   patchProduct: async (request, response) => {
     try {
       const { id } = request.params
-      const productName = request.body.product_name
-      if (productName === '') {
-        return helper.response(response, 400, 'Product name cannot be empty')
-      }
-      const productImg = request.body.product_image
-      if (productImg === '') {
-        return helper.response(response, 400, 'Product image cannot be empty')
-      }
-      const productPrice = request.body.product_price
-      if (productPrice === '') {
-        return helper.response(response, 400, 'Product price cannot be empty')
-      }
-      const categoryId = request.body.category_id
-      if (categoryId === '') {
-        return helper.response(response, 400, 'Category id cannot be empty')
-      }
-      const productStatus = request.body.product_status
-      if (productStatus === '') {
-        return helper.response(response, 400, 'Product status cannot be empty')
-      }
       const setData = {
-        product_name: productName,
-        product_image: productImg,
-        product_price: productPrice,
-        category_id: categoryId,
+        product_name: request.body.product_name,
+        product_image: request.file === undefined ? '' : request.file.filename,
+        product_price: request.body.product_price,
+        category_id: request.body.category_id,
         product_updated_at: new Date(),
-        product_status: productStatus
+        product_status: request.body.product_status
+      }
+      if (setData.product_name === '') {
+        return helper.response(response, 400, 'Name cannot be empty')
+      } else if (setData.product_image === '') {
+        setData.product_image = 'blank-product.jpg'
+      }
+      if (setData.product_price === '') {
+        return helper.response(response, 400, 'Price cannot be empty')
+      } else if (setData.category_id === '') {
+        return helper.response(response, 400, 'Please select category')
+      } else if (setData.product_status === '') {
+        return helper.response(response, 400, 'Please select status')
       }
       const checkId = await getProductById(id)
       if (checkId.length > 0) {
-        const result = await patchProduct(setData, id)
-        return helper.response(response, 201, 'Product Updated', result)
+        fs.unlink(`./uploads/${checkId[0].product_image}`, async (error) => {
+          if (error) {
+            throw error
+          } else {
+            const result = await patchProduct(setData, id)
+            return helper.response(response, 201, 'Product Updated', result)
+          }
+        })
       } else {
         return helper.response(response, 404, `Product by id: ${id} Not Found`)
       }
@@ -206,8 +195,14 @@ module.exports = {
       const { id } = request.params
       const checkId = await getProductById(id)
       if (checkId.length > 0) {
-        const result = await deleteProduct(id)
-        return helper.response(response, 201, 'Product Deleted', result)
+        fs.unlink(`./uploads/${checkId[0].product_image}`, async (error) => {
+          if (error) {
+            throw error
+          } else {
+            const result = await deleteProduct(id)
+            return helper.response(response, 201, 'Product Deleted', result)
+          }
+        })
       } else {
         return helper.response(response, 404, `Product by id: ${id} Not Found`)
       }
