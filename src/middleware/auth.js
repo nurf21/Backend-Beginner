@@ -2,22 +2,40 @@ const jwt = require('jsonwebtoken')
 const helper = require('../helper')
 
 module.exports = {
-  authorization: (request, response, next) => {
+  authorAdmin: (request, response, next) => {
     let token = request.headers.authorization
     if (token) {
-      // validasi token jwt
       token = token.split(' ')[1]
       jwt.verify(token, 'SECRET', (error, result) => {
         if ((error && error.name === 'JsonWebTokenError') || (error && error.name === 'TokenExpiredError')) {
           return helper.response(response, 403, error.message)
         } else {
-          // console.log(result)
+          if (result.user_role === 1) {
+            request.token = result
+            next()
+          } else {
+            return helper.response(response, 400, 'You are not allowed to do that')
+          }
+        }
+      })
+    } else {
+      return helper.response(response, 400, 'Please login first')
+    }
+  },
+  authorGeneral: (request, response, next) => {
+    let token = request.headers.authorization
+    if (token) {
+      token = token.split(' ')[1]
+      jwt.verify(token, 'SECRET', (error, result) => {
+        if ((error && error.name === 'JsonWebTokenError') || (error && error.name === 'TokenExpiredError')) {
+          return helper.response(response, 403, error.message)
+        } else {
           request.token = result
           next()
         }
       })
     } else {
-      return helper.response(response, 400, 'Please Login First')
+      return helper.response(response, 400, 'Please login first')
     }
   }
 }

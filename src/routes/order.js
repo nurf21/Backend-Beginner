@@ -1,18 +1,16 @@
 // Import express
 const router = require('express').Router()
 
-// Import object dari controller
-const {
-  getAllOrder,
-  getOrderById,
-  postOrder
-} = require('../controller/order')
+// Import object from controller
+const { getAllOrder, getOrderById, postOrder } = require('../controller/order')
+
+const { authorGeneral, authorAdmin } = require('../middleware/auth')
 
 // [GET]
-router.get('/', getAllOrder)
-router.get('/:id', getOrderById)
+router.get('/', authorAdmin, getAllOrder)
+router.get('/:id', authorAdmin, getOrderById)
 
 // [POST]
-router.post('/', postOrder)
+router.post('/', authorGeneral, postOrder)
 
 module.exports = router

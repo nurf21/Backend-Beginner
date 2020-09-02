@@ -1,18 +1,13 @@
 // Import express
 const router = require('express').Router()
 
-// Import object dari controller
-const {
-  getProduct,
-  getProductByName,
-  getProductById,
-  postProduct,
-  patchProduct,
-  deleteProduct
-} = require('../controller/product')
+// Import object from controller
+const { getProduct, getProductByName, getProductById, postProduct, patchProduct, deleteProduct } = require('../controller/product')
 
-const { authorization } = require('../middleware/auth')
+// Import auth and redis
+const { authorGeneral, authorAdmin } = require('../middleware/auth')
 const { getProductByIdRedis, clearDataProductRedis } = require('../middleware/redis')
+
 const multer = require('multer')
 
 const storage = multer.diskStorage({
@@ -27,17 +22,17 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 // [GET]
-router.get('/', authorization, getProduct)
-router.get('/search', getProductByName)
-router.get('/:id', authorization, getProductByIdRedis, getProductById)
+router.get('/', authorGeneral, getProduct)
+router.get('/search', authorGeneral, getProductByName)
+router.get('/:id', authorGeneral, getProductByIdRedis, getProductById)
 
 // [POST]
-router.post('/', upload.single('product_image'), postProduct)
+router.post('/', authorAdmin, upload.single('product_image'), postProduct)
 
 // [PATCH]
-router.patch('/:id', clearDataProductRedis, patchProduct)
+router.patch('/:id', authorAdmin, clearDataProductRedis, patchProduct)
 
 // [DELETE]
-router.delete('/:id', clearDataProductRedis, deleteProduct)
+router.delete('/:id', authorAdmin, clearDataProductRedis, deleteProduct)
 
 module.exports = router

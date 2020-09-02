@@ -2,25 +2,21 @@
 const router = require('express').Router()
 
 // Import object from controller
-const {
-  getAllCategory,
-  getCategoryById,
-  postCategory,
-  patchCategory,
-  deleteCategory
-} = require('../controller/category')
+const { getAllCategory, getCategoryById, postCategory, patchCategory, deleteCategory } = require('../controller/category')
+
+const { authorGeneral, authorAdmin } = require('../middleware/auth')
 
 // [GET]
-router.get('/', getAllCategory)
-router.get('/:id', getCategoryById)
+router.get('/', authorGeneral, getAllCategory)
+router.get('/:id', authorGeneral, getCategoryById)
 
 // [POST]
-router.post('/', postCategory)
+router.post('/', authorAdmin, postCategory)
 
 // [PATCH]
-router.patch('/:id', patchCategory)
+router.patch('/:id', authorAdmin, patchCategory)
 
 // [DELETE]
-router.delete('/:id', deleteCategory)
+router.delete('/:id', authorAdmin, deleteCategory)
 
 module.exports = router
