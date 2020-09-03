@@ -12,9 +12,16 @@
 					"name": "GET_PRODUCT",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product",
+							"raw": "http://127.0.0.1:3001/product?page=1&limit=6&sort=product_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -29,18 +36,15 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "1",
-									"disabled": true
+									"value": "1"
 								},
 								{
 									"key": "limit",
-									"value": "3",
-									"disabled": true
+									"value": "6"
 								},
 								{
 									"key": "sort",
-									"value": "product_created_at DESC",
-									"disabled": true
+									"value": "product_id"
 								}
 							]
 						}
@@ -53,7 +57,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/search?keyword=atte",
+							"raw": "http://127.0.0.1:3001/product/search?keyword=Latte",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -69,7 +73,7 @@
 							"query": [
 								{
 									"key": "keyword",
-									"value": "atte"
+									"value": "Latte"
 								}
 							]
 						}
@@ -82,7 +86,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/10",
+							"raw": "http://127.0.0.1:3001/product/3",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -93,7 +97,7 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"10"
+								"3"
 							]
 						}
 					},
@@ -105,26 +109,26 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
+							"mode": "formdata",
+							"formdata": [
 								{
 									"key": "product_name",
-									"value": "Orange Juice",
+									"value": "Meatball",
 									"type": "text"
 								},
 								{
 									"key": "product_image",
-									"value": "#",
-									"type": "text"
+									"type": "file",
+									"src": "/E:/Arkademy/web-3/Tugas/9. Backend Intermediate/puttygen.exe"
 								},
 								{
 									"key": "product_price",
-									"value": "10000",
+									"value": "12000",
 									"type": "text"
 								},
 								{
 									"key": "category_id",
-									"value": "1",
+									"value": "4",
 									"type": "text"
 								},
 								{
@@ -157,26 +161,26 @@
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
+							"mode": "formdata",
+							"formdata": [
 								{
 									"key": "product_name",
-									"value": "Orange Juice",
+									"value": "Meatball",
 									"type": "text"
 								},
 								{
 									"key": "product_image",
-									"value": "#",
-									"type": "text"
+									"type": "file",
+									"src": "/E:/Arkademy/web-3/Tugas/9. Backend Intermediate/meatball.jpg"
 								},
 								{
 									"key": "product_price",
-									"value": "10000",
+									"value": "12000",
 									"type": "text"
 								},
 								{
 									"key": "category_id",
-									"value": "1",
+									"value": "4",
 									"type": "text"
 								},
 								{
@@ -187,7 +191,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/6",
+							"raw": "http://127.0.0.1:3001/product/57",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -198,7 +202,7 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"6"
+								"57"
 							]
 						}
 					},
@@ -210,7 +214,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/11",
+							"raw": "http://127.0.0.1:3001/product/57",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -221,11 +225,33 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"11"
+								"57"
 							]
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "20e2135d-0cfb-4d94-861b-3a8b5b85561e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6861e722-abb5-48ff-b8cd-1dc0c7481920",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -261,7 +287,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/category/7",
+							"raw": "http://127.0.0.1:3001/category/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -272,7 +298,7 @@
 							"port": "3001",
 							"path": [
 								"category",
-								"7"
+								"1"
 							]
 						}
 					},
@@ -288,7 +314,7 @@
 							"urlencoded": [
 								{
 									"key": "category_name",
-									"value": "Beverage",
+									"value": "Others",
 									"type": "text"
 								}
 							]
@@ -320,13 +346,13 @@
 							"urlencoded": [
 								{
 									"key": "category_name",
-									"value": "Others",
+									"value": "Snack",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3001/category/6",
+							"raw": "http://127.0.0.1:3001/category/8",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -337,7 +363,7 @@
 							"port": "3001",
 							"path": [
 								"category",
-								"6"
+								"8"
 							]
 						}
 					},
@@ -367,6 +393,28 @@
 					"response": []
 				}
 			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5a609d77-55b5-4a27-8ec3-e1f705c3f3f9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c24755b-bea8-4318-9e14-ef9adbb67859",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
 		},
 		{
@@ -378,7 +426,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/history",
+							"raw": "http://127.0.0.1:3001/history?page=1&limit=5&sort=history_created_at",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -393,18 +441,15 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "1",
-									"disabled": true
+									"value": "1"
 								},
 								{
 									"key": "limit",
-									"value": "3",
-									"disabled": true
+									"value": "5"
 								},
 								{
 									"key": "sort",
-									"value": "history_created_at DESC",
-									"disabled": true
+									"value": "history_created_at"
 								}
 							]
 						}
@@ -442,6 +487,28 @@
 					"response": []
 				}
 			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4d28055f-0170-4615-b129-0198f25062ac",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "47e20f54-4bb2-4570-9129-f99b846ea398",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
 		},
 		{
@@ -453,7 +520,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/order",
+							"raw": "http://127.0.0.1:3001/order?page=1&limit=5&sort=order_id",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -468,18 +535,15 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "1",
-									"disabled": true
+									"value": "1"
 								},
 								{
 									"key": "limit",
-									"value": "5",
-									"disabled": true
+									"value": "5"
 								},
 								{
 									"key": "sort",
-									"value": "order_id DESC",
-									"disabled": true
+									"value": "order_id"
 								}
 							]
 						}
@@ -492,7 +556,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/order/94",
+							"raw": "http://127.0.0.1:3001/order/99",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -503,7 +567,7 @@
 							"port": "3001",
 							"path": [
 								"order",
-								"94"
+								"99"
 							]
 						}
 					},
@@ -516,7 +580,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orders\": [\r\n        {\r\n            \"product_id\": 5,\r\n            \"qty\": 2\r\n        },\r\n        {\r\n            \"product_id\": 7,\r\n            \"qty\": 2\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"orders\": [\r\n        {\r\n            \"product_id\": 1,\r\n            \"qty\": 2\r\n        },\r\n        {\r\n            \"product_id\": 8,\r\n            \"qty\": 2\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -541,7 +605,151 @@
 					"response": []
 				}
 			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "64c7de66-799b-4f00-a9b6-c531c1f14b6c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3ba9e39d-e9b3-40d6-8f6a-47b11f3cfd5d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "USER_REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_email",
+									"value": "girisaidn@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "user_password",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "user_name",
+									"value": "Said",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3001/users/register",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER_LOGIN",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_email",
+									"value": "nurfauzangiri@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "user_password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3001/users/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoibnVyZmF1emFuZ2lyaUBnbWFpbC5jb20iLCJ1c2VyX25hbWUiOiJHaXJpIiwidXNlcl9yb2xlIjoxLCJ1c2VyX3N0YXR1cyI6MSwiaWF0IjoxNTk5MTMwNzg4LCJleHAiOjE1OTkyMTcxODh9.bujBMdq1ZU27VDVCUGeBLzrR_e-iA4ZsgQi9E0U_-0k",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "47b56c13-9a2a-4e58-a5b4-3e66091a89aa",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c6836f41-5122-4d75-98a7-e5c937c3eae6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
