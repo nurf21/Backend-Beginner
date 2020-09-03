@@ -6,7 +6,7 @@ module.exports = {
   productRedis: (request, response, next) => {
     client.get(`product:${JSON.stringify(request.query)}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data, JSON.parse(result).pagination)
       } else {
         next()
       }
@@ -15,7 +15,7 @@ module.exports = {
   searchProductRedis: (request, response, next) => {
     client.get(`searchproduct:${JSON.stringify(request.query)}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {
         next()
       }
@@ -25,7 +25,7 @@ module.exports = {
     const { id } = request.params
     client.get(`productid:${id}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {
         next()
       }
@@ -34,7 +34,7 @@ module.exports = {
   categoryRedis: (request, response, next) => {
     client.get('category', (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {
         next()
       }
@@ -44,7 +44,7 @@ module.exports = {
     const { id } = request.params
     client.get(`categoryid:${id}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {
         next()
       }
@@ -53,7 +53,7 @@ module.exports = {
   historyRedis: (request, response, next) => {
     client.get(`history:${JSON.stringify(request.query)}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data, JSON.parse(result).pagination)
       } else {
         next()
       }
@@ -63,7 +63,7 @@ module.exports = {
     const { id } = request.params
     client.get(`historyid:${id}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {
         next()
       }
@@ -72,7 +72,7 @@ module.exports = {
   orderRedis: (request, response, next) => {
     client.get(`order:${JSON.stringify(request.query)}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data, JSON.parse(result).pagination)
       } else {
         next()
       }
@@ -82,7 +82,7 @@ module.exports = {
     const { id } = request.params
     client.get(`orderid:${id}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, JSON.parse(result))
+        return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {
         next()
       }

@@ -4,6 +4,7 @@ const { getAllCategory, getCategoryById, postCategory, patchCategory, deleteCate
 // Import helper
 const helper = require('../helper')
 
+// Import redis
 const redis = require('redis')
 const client = redis.createClient()
 
@@ -11,11 +12,15 @@ module.exports = {
   getAllCategory: async (request, response) => {
     try {
       const result = await getAllCategory()
-      client.setex('category', 3600, JSON.stringify(result))
       if (result.length > 0) {
+        const newResult = {
+          msg: 'Get All Category Success',
+          data: result
+        }
+        client.setex('category', 3600, JSON.stringify(newResult))
         return helper.response(response, 200, 'Get All Category Success', result)
       } else {
-        return helper.response(response, 404, 'Category Not Found', result)
+        return helper.response(response, 200, 'Get All Category Success', [])
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -25,8 +30,12 @@ module.exports = {
     try {
       const { id } = request.params
       const result = await getCategoryById(id)
-      client.setex(`categoryid:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
+        const newResult = {
+          msg: `Get Category id: ${id} Success`,
+          data: result
+        }
+        client.setex(`categoryid:${id}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, `Get Category id: ${id} Success`, result)
       } else {
         return helper.response(response, 404, `Category id: ${id} not found`, result)

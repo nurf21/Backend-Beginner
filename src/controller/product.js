@@ -61,8 +61,13 @@ module.exports = {
     }
     try {
       const result = await getProduct(sort, limit, offset)
-      client.setex(`product:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
+        const newResult = {
+          msg: 'Success Get Product',
+          data: result,
+          pagination: pageInfo
+        }
+        client.setex(`product:${JSON.stringify(request.query)}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, 'Success Get Product', result, pageInfo)
       } else {
         return helper.response(response, 404, 'Product not found', result, pageInfo)
@@ -81,11 +86,15 @@ module.exports = {
         searchResult,
         totalData
       }
-      client.setex(`searchproduct:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       if (searchResult.length > 0) {
+        const newResult = {
+          msg: 'Success Get Product',
+          data: result
+        }
+        client.setex(`searchproduct:${JSON.stringify(request.query)}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, 'Success Get Product', result)
       } else {
-        return helper.response(response, 200, 'Product not found', [])
+        return helper.response(response, 200, 'Success Get Product', [])
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -95,8 +104,12 @@ module.exports = {
     try {
       const { id } = request.params
       const result = await getProductById(id)
-      client.setex(`productid:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
+        const newResult = {
+          msg: 'Get Product Success',
+          data: result
+        }
+        client.setex(`productid:${id}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, 'Get Product Success', result)
       } else {
         return helper.response(response, 404, `Product by id: ${id} not found`, result)

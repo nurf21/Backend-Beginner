@@ -60,11 +60,16 @@ module.exports = {
     }
     try {
       const result = await getAllOrder(sort, limit, offset)
-      client.setex(`order:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
+        const newResult = {
+          msg: 'Get Order Success',
+          data: result,
+          pagination: pageInfo
+        }
+        client.setex(`order:${JSON.stringify(request.query)}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, 'Get Order Success', result, pageInfo)
       } else {
-        return helper.response(response, 404, 'Order Not Found', result, pageInfo)
+        return helper.response(response, 200, 'Get Order Success', [], pageInfo)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -74,8 +79,12 @@ module.exports = {
     try {
       const { id } = request.params
       const result = await getOrderById(id)
-      client.setex(`orderid:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
+        const newResult = {
+          msg: `Get Order id: ${id} Success`,
+          data: result
+        }
+        client.setex(`orderid:${id}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, `Get Order id: ${id} Success`, result)
       } else {
         return helper.response(response, 404, `Order id: ${id} Not Found`, result)

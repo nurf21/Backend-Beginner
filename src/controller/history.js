@@ -68,7 +68,12 @@ module.exports = {
         const tax = total * 10 / 100
         result[i].tax = tax
       }
-      client.setex(`history:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
+      const newResult = {
+        msg: 'Success Get History',
+        data: result,
+        pagination: pageInfo
+      }
+      client.setex(`history:${JSON.stringify(request.query)}`, 3600, JSON.stringify(newResult))
       return helper.response(response, 200, 'Success Get History', result, pageInfo)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -143,7 +148,11 @@ module.exports = {
         subtotal: dataHistory[0].history_subtotal,
         history_created_at: dataHistory[0].history_created_at
       }
-      client.setex(`historyid:${id}`, 3600, JSON.stringify(result))
+      const newResult = {
+        msg: `Get History id: ${id} Success`,
+        data: result
+      }
+      client.setex(`historyid:${id}`, 3600, JSON.stringify(newResult))
       return helper.response(response, 200, `Get History id: ${id} Success`, result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
