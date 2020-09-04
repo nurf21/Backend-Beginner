@@ -13,7 +13,7 @@ module.exports = {
     })
   },
   searchProductRedis: (request, response, next) => {
-    client.get(`searchproduct:${JSON.stringify(request.query)}`, (error, result) => {
+    client.get(`productsearh:${JSON.stringify(request.query)}`, (error, result) => {
       if (!error && result != null) {
         return helper.response(response, 200, JSON.parse(result).msg, JSON.parse(result).data)
       } else {

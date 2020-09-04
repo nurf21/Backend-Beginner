@@ -15,10 +15,10 @@ router.get('/search', authorGeneral, searchProductRedis, getProductByName)
 router.get('/:id', authorGeneral, productIdRedis, getProductById)
 
 // [POST]
-router.post('/', authorAdmin, upload.single('product_image'), clearRedis, postProduct)
+router.post('/', authorAdmin, upload, clearRedis, postProduct)
 
 // [PATCH]
-router.patch('/:id', authorAdmin, upload.single('product_image'), clearRedis, patchProduct)
+router.patch('/:id', authorAdmin, upload, clearRedis, patchProduct)
 
 // [DELETE]
 router.delete('/:id', authorAdmin, clearRedis, deleteProduct)
