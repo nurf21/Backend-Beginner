@@ -40,9 +40,7 @@ module.exports = {
   getProduct: async (request, response) => {
     let { page, limit, sort } = request.query
     page === undefined || page === '' ? (page = 1) : (page = parseInt(page))
-    limit === undefined || limit === ''
-      ? (limit = 9)
-      : (limit = parseInt(limit))
+    limit === undefined || limit === '' ? (limit = 9) : (limit = parseInt(limit))
     const totalData = await getProductCount()
     if (sort === undefined || sort === '') {
       sort = 'product_id'
@@ -63,7 +61,6 @@ module.exports = {
       const result = await getProduct(sort, limit, offset)
       if (result.length > 0) {
         const newResult = {
-          msg: 'Success Get Product',
           data: result,
           pagination: pageInfo
         }
@@ -87,11 +84,7 @@ module.exports = {
         totalData
       }
       if (searchResult.length > 0) {
-        const newResult = {
-          msg: 'Success Get Product',
-          data: result
-        }
-        client.setex(`searchproduct:${JSON.stringify(request.query)}`, 3600, JSON.stringify(newResult))
+        client.setex(`searchproduct:${JSON.stringify(request.query)}`, 3600, JSON.stringify(result))
         return helper.response(response, 200, 'Success Get Product', result)
       } else {
         return helper.response(response, 200, 'Success Get Product', [])
@@ -105,11 +98,7 @@ module.exports = {
       const { id } = request.params
       const result = await getProductById(id)
       if (result.length > 0) {
-        const newResult = {
-          msg: 'Get Product Success',
-          data: result
-        }
-        client.setex(`productid:${id}`, 3600, JSON.stringify(newResult))
+        client.setex(`productid:${id}`, 3600, JSON.stringify(result))
         return helper.response(response, 200, 'Get Product Success', result)
       } else {
         return helper.response(response, 404, `Product by id: ${id} not found`, result)

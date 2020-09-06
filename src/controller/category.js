@@ -13,11 +13,7 @@ module.exports = {
     try {
       const result = await getAllCategory()
       if (result.length > 0) {
-        const newResult = {
-          msg: 'Get All Category Success',
-          data: result
-        }
-        client.setex('category', 3600, JSON.stringify(newResult))
+        client.setex('category', 3600, JSON.stringify(result))
         return helper.response(response, 200, 'Get All Category Success', result)
       } else {
         return helper.response(response, 200, 'Get All Category Success', [])
@@ -31,11 +27,7 @@ module.exports = {
       const { id } = request.params
       const result = await getCategoryById(id)
       if (result.length > 0) {
-        const newResult = {
-          msg: `Get Category id: ${id} Success`,
-          data: result
-        }
-        client.setex(`categoryid:${id}`, 3600, JSON.stringify(newResult))
+        client.setex(`categoryid:${id}`, 3600, JSON.stringify(result))
         return helper.response(response, 200, `Get Category id: ${id} Success`, result)
       } else {
         return helper.response(response, 404, `Category id: ${id} not found`, result)

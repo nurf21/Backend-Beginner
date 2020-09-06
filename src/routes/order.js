@@ -5,13 +5,13 @@ const router = require('express').Router()
 const { getAllOrder, getOrderById, postOrder } = require('../controller/order')
 
 const { authorGeneral, authorAdmin } = require('../middleware/auth')
-const { orderRedis, orderIdRedis, clearRedis } = require('../middleware/redis')
+const { orderRedis, orderIdRedis, clearHistory } = require('../middleware/redis')
 
 // [GET]
 router.get('/', authorAdmin, orderRedis, getAllOrder)
 router.get('/:id', authorAdmin, orderIdRedis, getOrderById)
 
 // [POST]
-router.post('/', authorGeneral, clearRedis, postOrder)
+router.post('/', authorGeneral, clearHistory, postOrder)
 
 module.exports = router

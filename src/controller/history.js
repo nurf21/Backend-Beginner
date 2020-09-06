@@ -40,7 +40,7 @@ module.exports = {
   getAllHistory: async (request, response) => {
     let { page, limit, sort } = request.query
     page === undefined || page === '' ? page = 1 : page = parseInt(page)
-    limit === undefined || limit === '' ? limit = 100 : limit = parseInt(limit)
+    limit === undefined || limit === '' ? limit = 10 : limit = parseInt(limit)
     if (sort === undefined || sort === '') {
       sort = 'history_id'
     }
@@ -69,7 +69,6 @@ module.exports = {
         result[i].tax = tax
       }
       const newResult = {
-        msg: 'Success Get History',
         data: result,
         pagination: pageInfo
       }
@@ -148,11 +147,7 @@ module.exports = {
         subtotal: dataHistory[0].history_subtotal,
         history_created_at: dataHistory[0].history_created_at
       }
-      const newResult = {
-        msg: `Get History id: ${id} Success`,
-        data: result
-      }
-      client.setex(`historyid:${id}`, 3600, JSON.stringify(newResult))
+      client.setex(`historyid:${id}`, 3600, JSON.stringify(result))
       return helper.response(response, 200, `Get History id: ${id} Success`, result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

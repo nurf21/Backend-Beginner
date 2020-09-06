@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const helper = require('../helper')
-const { postUser, checkUser } = require('../model/users')
+const redis = require('redis')
+const client = redis.createClient()
+const { postUser, checkUser, getUser, patchUser } = require('../model/users')
 
 module.exports = {
   registerUser: async (request, response) => {
@@ -49,7 +51,7 @@ module.exports = {
           if (payload.user_status === 0) {
             return helper.response(response, 400, 'Your account is already registered but not activated, please contact admin first')
           } else {
-            const token = jwt.sign(payload, 'SECRET', { expiresIn: '24h' })
+            const token = jwt.sign(payload, 'SECRET', { expiresIn: '6h' })
             payload = { ...payload, token }
             return helper.response(response, 200, 'Login Success', payload)
           }
@@ -61,6 +63,34 @@ module.exports = {
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request')
+    }
+  },
+  getUser: async (request, response) => {
+    try {
+      const result = await getUser()
+      result.map(value => delete value.user_password)
+      client.setex('user', 3600, JSON.stringify(result))
+      return helper.response(response, 200, 'Get User Success', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  patchUser: async (request, response) => {
+    const salt = bcrypt.genSaltSync(10)
+    const encryptPassword = bcrypt.hashSync(request.body.user_password, salt)
+    const { id } = request.params
+    const setData = {
+      user_password: encryptPassword,
+      user_name: request.body.user_name,
+      user_role: request.body.user_role,
+      user_status: request.body.user_status,
+      user_updated_at: new Date()
+    }
+    try {
+      const result = await patchUser(setData, id)
+      return helper.response(response, 201, 'User Updated', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
     }
   }
 }

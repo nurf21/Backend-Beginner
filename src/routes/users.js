@@ -1,7 +1,13 @@
 const router = require('express').Router()
-const { registerUser, loginUser } = require('../controller/users')
+const { registerUser, loginUser, getUser, patchUser } = require('../controller/users')
+const { authorAdmin } = require('../middleware/auth')
+const { userRedis, clearUser } = require('../middleware/redis')
 
-router.post('/register', registerUser)
+router.get('/', authorAdmin, userRedis, getUser)
 router.get('/login', loginUser)
+
+router.post('/register', clearUser, registerUser)
+
+router.patch('/:id', authorAdmin, clearUser, patchUser)
 
 module.exports = router
