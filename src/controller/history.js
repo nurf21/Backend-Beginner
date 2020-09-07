@@ -162,7 +162,10 @@ module.exports = {
   getTotalIncome: async (request, response) => {
     try {
       const { date } = request.query
-      const result = await getTotalIncome(date)
+      let result = await getTotalIncome(date)
+      if (result === null) {
+        result = 0
+      }
       return helper.response(response, 200, `Get total income ${date} Success`, result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -171,7 +174,10 @@ module.exports = {
   getTotalIncomeYear: async (request, response) => {
     try {
       const { date } = request.query
-      const result = await getTotalIncomeYear(date)
+      let result = await getTotalIncomeYear(date)
+      if (result === null) {
+        result = 0
+      }
       return helper.response(response, 200, 'Get total income year Success', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

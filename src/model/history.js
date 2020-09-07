@@ -67,7 +67,15 @@ module.exports = {
   getCountHistoryWeek: (date) => {
     return new Promise((resolve, reject) => {
       connection.query(`SELECT COUNT(*) AS orders FROM history WHERE YEARWEEK(history_created_at) = YEARWEEK('${date}')GROUP BY YEARWEEK('${date}')`, (error, result) => {
-        !error ? resolve(result[0].orders) : reject(new Error(error))
+        if (!error) {
+          if (result.length > 0) {
+            resolve(result[0].orders)
+          } else {
+            resolve(0)
+          }
+        } else {
+          reject(new Error(error))
+        }
       })
     })
   },

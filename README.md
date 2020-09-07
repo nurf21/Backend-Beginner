@@ -1,6 +1,6 @@
 <h1 align="center">ExpressJS - Cazzy RESTfull API</h1>
 
-This project is a backend to my project, Cazzy POS App. Its main purpose is to make cafe or shop owner easier to checkout and manage datas in database. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+This project is a backend to my project, [Cazzy POS App](https://github.com/nurf21/Cazzy-POS-App-Frontend). Its main purpose is to make cafe or shop owner easier to checkout and manage datas in database. [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 
@@ -34,9 +34,11 @@ DB_HOST=localhost // Database host
 DB_PASS=          // Database password
 DB_USER=root      // Database user
 DB_NAME=pos_app   // Database name
+PORT=3001         // Port where express is running
+IP=127.0.0.1      // IP where express is running
 ```
 
-## End Point
+## End Points
 
 **1. GET**
 
