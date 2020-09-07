@@ -29,7 +29,7 @@ module.exports = {
         return helper.response(response, 400, 'Name cannot be empty')
       } else {
         const result = await postUser(setData)
-        return helper.response(response, 200, 'Register Success', result)
+        return helper.response(response, 200, 'Register Success ! Please contact admin to activate your account', result)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request')
@@ -51,7 +51,7 @@ module.exports = {
           if (payload.user_status === 0) {
             return helper.response(response, 400, 'Your account is already registered but not activated, please contact admin first')
           } else {
-            const token = jwt.sign(payload, 'SECRET', { expiresIn: '6h' })
+            const token = jwt.sign(payload, 'SECRET', { expiresIn: '12h' })
             payload = { ...payload, token }
             return helper.response(response, 200, 'Login Success', payload)
           }
@@ -59,7 +59,7 @@ module.exports = {
           return helper.response(response, 400, 'Wrong Password')
         }
       } else {
-        return helper.response(response, 400, 'Email is not registeredd')
+        return helper.response(response, 400, 'Email is not registered')
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request')
@@ -87,6 +87,9 @@ module.exports = {
       user_updated_at: new Date()
     }
     try {
+      if (request.body.user_password.length < 8 || request.body.user_password.length > 16) {
+        return helper.response(response, 400, 'Password must be 8-16 characters')
+      }
       const result = await patchUser(setData, id)
       return helper.response(response, 201, 'User Updated', result)
     } catch (error) {

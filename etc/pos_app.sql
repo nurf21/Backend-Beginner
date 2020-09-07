@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2020 at 10:24 AM
+-- Generation Time: Sep 07, 2020 at 03:09 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -225,8 +225,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_email`, `user_password`, `user_name`, `user_role`, `user_status`, `user_created_at`, `user_updated_at`) VALUES
-(1, 'nurfauzangiri@gmail.com', '$2b$10$6XijeCpXNdo5gnD1T4sklef8x5XOJTQljNvUOQpyjP32chczwLfg2', 'Giri', 1, 1, '2020-09-02 06:43:57', '0000-00-00 00:00:00'),
-(2, 'girisaidn@gmail.com', '$2b$10$eEKKWyvSjqBH7hKtgUkYaunhzjnLFDuXaScVTlSwy11lcAIdhWCpi', 'Said', 2, 1, '2020-09-02 08:28:15', '0000-00-00 00:00:00');
+(1, 'admin@cazzypos.com', '$2b$10$JAhYX8CeU6nYGCiuluMH9ukOqh0QQ2pRy5WFfBHlx2P78km7AgvAu', 'Admin', 1, 1, '2020-09-07 13:03:38', '2020-09-06 13:02:41'),
+(2, 'user1@cazzypos.com', '$2b$10$ovSXMAiN1IcIF7u90oxlnumetFDziMIZtnwzfwbLpHu3YgtoI9zR2', 'User 1', 2, 1, '2020-09-07 13:06:23', '2020-09-07 13:06:23');
 
 --
 -- Indexes for dumped tables
@@ -270,7 +270,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `history`
@@ -288,13 +288,13 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

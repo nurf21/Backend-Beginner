@@ -39,6 +39,7 @@ module.exports = {
             user_id: id,
             ...setData
           }
+          delete newResult.user_password
           resolve(newResult)
         } else {
           reject(new Error(error))
