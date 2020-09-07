@@ -24,9 +24,23 @@ module.exports = {
       })
     })
   },
-  getUser: () => {
+  getUser: (limit, offset) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM user', (error, result) => {
+      connection.query('SELECT * FROM user ORDER BY user_role LIMIT ? OFFSET ?', [limit, offset], (error, result) => {
+        !error ? resolve(result) : reject(new Error(error))
+      })
+    })
+  },
+  getUserCount: () => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT COUNT(*) as total FROM user', (error, result) => {
+        !error ? resolve(result[0].total) : reject(new Error(error))
+      })
+    })
+  },
+  getUserById: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM user WHERE user_id = ?', id, (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
     })

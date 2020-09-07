@@ -119,9 +119,9 @@ module.exports = {
     })
   },
   userRedis: (request, response, next) => {
-    client.get('user', (error, result) => {
+    client.get(`user:${JSON.stringify(request.query)}`, (error, result) => {
       if (!error && result != null) {
-        return helper.response(response, 200, 'Get User Success', JSON.parse(result))
+        return helper.response(response, 200, 'Get User Success', JSON.parse(result).data, JSON.parse(result).pagination)
       } else {
         next()
       }

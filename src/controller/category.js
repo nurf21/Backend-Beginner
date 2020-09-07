@@ -1,10 +1,5 @@
-// Import object from model
 const { getAllCategory, getCategoryById, postCategory, patchCategory, deleteCategory } = require('../model/category')
-
-// Import helper
 const helper = require('../helper')
-
-// Import redis
 const redis = require('redis')
 const client = redis.createClient()
 
@@ -14,9 +9,9 @@ module.exports = {
       const result = await getAllCategory()
       if (result.length > 0) {
         client.setex('category', 3600, JSON.stringify(result))
-        return helper.response(response, 200, 'Get All Category Success', result)
+        return helper.response(response, 200, 'Get All Categories Success', result)
       } else {
-        return helper.response(response, 200, 'Get All Category Success', [])
+        return helper.response(response, 200, 'Get All Categories Success', [])
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -38,12 +33,11 @@ module.exports = {
   },
   postCategory: async (request, response) => {
     try {
-      const categoryName = request.body.category_name
-      if (categoryName === '') {
+      if (request.body.category_name === '') {
         return helper.response(response, 201, 'Category name cannot be empty')
       }
       const setData = {
-        category_name: categoryName,
+        category_name: request.body.category_name,
         category_created_at: new Date()
       }
       const result = await postCategory(setData)
@@ -55,12 +49,11 @@ module.exports = {
   patchCategory: async (request, response) => {
     try {
       const { id } = request.params
-      const categoryName = request.body.category_name
-      if (categoryName === '') {
+      if (request.body.category_name === '') {
         return helper.response(response, 201, 'Category name cannot be empty')
       }
       const setData = {
-        category_name: categoryName,
+        category_name: request.body.category_name,
         category_updated_at: new Date()
       }
       const checkId = await getCategoryById(id)

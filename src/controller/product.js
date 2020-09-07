@@ -1,17 +1,10 @@
-// Import object from model
 const { getProduct, getProductCount, getProductByName, getProductCountByName, getProductById, postProduct, patchProduct, deleteProduct } = require('../model/product')
-
-// Import query string
 const qs = require('querystring')
-
-// Import helper
 const helper = require('../helper')
-
 const fs = require('fs')
 const redis = require('redis')
 const client = redis.createClient()
 
-// Pagination
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
     const generatePage = {
@@ -40,7 +33,7 @@ module.exports = {
   getProduct: async (request, response) => {
     let { page, limit, sort } = request.query
     page === undefined || page === '' ? (page = 1) : (page = parseInt(page))
-    limit === undefined || limit === '' ? (limit = 9) : (limit = parseInt(limit))
+    limit === undefined || limit === '' ? (limit = 6) : (limit = parseInt(limit))
     const totalData = await getProductCount()
     if (sort === undefined || sort === '') {
       sort = 'product_id'
@@ -67,7 +60,7 @@ module.exports = {
         client.setex(`product:${JSON.stringify(request.query)}`, 3600, JSON.stringify(newResult))
         return helper.response(response, 200, 'Success Get Product', result, pageInfo)
       } else {
-        return helper.response(response, 404, 'Product not found', result, pageInfo)
+        return helper.response(response, 200, 'Success Get Product', [], pageInfo)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
@@ -160,14 +153,19 @@ module.exports = {
       }
       const checkId = await getProductById(id)
       if (checkId.length > 0) {
-        fs.unlink(`./uploads/${checkId[0].product_image}`, async (error) => {
-          if (error) {
-            throw error
-          } else {
-            const result = await patchProduct(setData, id)
-            return helper.response(response, 201, 'Product Updated', result)
-          }
-        })
+        if (checkId[0].product_image === 'blank-product.jpg') {
+          const result = await patchProduct(setData, id)
+          return helper.response(response, 201, 'Product Updated', result)
+        } else {
+          fs.unlink(`./uploads/${checkId[0].product_image}`, async (error) => {
+            if (error) {
+              throw error
+            } else {
+              const result = await patchProduct(setData, id)
+              return helper.response(response, 201, 'Product Updated', result)
+            }
+          })
+        }
       } else {
         return helper.response(response, 404, `Product by id: ${id} Not Found`)
       }
@@ -180,14 +178,19 @@ module.exports = {
       const { id } = request.params
       const checkId = await getProductById(id)
       if (checkId.length > 0) {
-        fs.unlink(`./uploads/${checkId[0].product_image}`, async (error) => {
-          if (error) {
-            throw error
-          } else {
-            const result = await deleteProduct(id)
-            return helper.response(response, 201, 'Product Deleted', result)
-          }
-        })
+        if (checkId[0].product_image === 'blank-product.jpg') {
+          const result = await deleteProduct(id)
+          return helper.response(response, 201, 'Product Deleted', result)
+        } else {
+          fs.unlink(`./uploads/${checkId[0].product_image}`, async (error) => {
+            if (error) {
+              throw error
+            } else {
+              const result = await deleteProduct(id)
+              return helper.response(response, 201, 'Product Deleted', result)
+            }
+          })
+        }
       } else {
         return helper.response(response, 404, `Product by id: ${id} Not Found`)
       }

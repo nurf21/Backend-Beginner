@@ -1,18 +1,11 @@
-// Import object from model
 const { getAllOrder, getOrderCount, getOrderById, getOrderByHistoryId, postOrder } = require('../model/order')
 const { getHistoryById, postHistory, patchHistory } = require('../model/history')
 const { getProductById } = require('../model/product')
-
-// Import query string
 const qs = require('querystring')
-
-// Import helper
 const helper = require('../helper')
-
 const redis = require('redis')
 const client = redis.createClient()
 
-// Pagination
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
     const generatePage = {

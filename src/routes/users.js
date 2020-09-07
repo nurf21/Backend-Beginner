@@ -4,8 +4,8 @@ const { authorAdmin } = require('../middleware/auth')
 const { userRedis, clearUser } = require('../middleware/redis')
 
 router.get('/', authorAdmin, userRedis, getUser)
-router.get('/login', loginUser)
 
+router.post('/login', loginUser)
 router.post('/register', clearUser, registerUser)
 
 router.patch('/:id', authorAdmin, clearUser, patchUser)

@@ -1,17 +1,10 @@
-// Import object from model
 const { getAllHistory, getHistoryToday, getHistoryWeek, getHistoryMonth, getHistoryCount, getSumChart, getTotalIncome, getTotalIncomeYear, getCountHistoryWeek, getHistoryById } = require('../model/history')
 const { getOrderByHistoryId } = require('../model/order')
-
-// Import query string
 const qs = require('querystring')
-
-// Import helper
 const helper = require('../helper')
-
 const redis = require('redis')
 const client = redis.createClient()
 
-// Pagination
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
     const generatePage = {
@@ -40,7 +33,7 @@ module.exports = {
   getAllHistory: async (request, response) => {
     let { page, limit, sort } = request.query
     page === undefined || page === '' ? page = 1 : page = parseInt(page)
-    limit === undefined || limit === '' ? limit = 10 : limit = parseInt(limit)
+    limit === undefined || limit === '' ? limit = 5 : limit = parseInt(limit)
     if (sort === undefined || sort === '') {
       sort = 'history_id'
     }
