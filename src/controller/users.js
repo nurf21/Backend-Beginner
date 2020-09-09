@@ -44,14 +44,14 @@ module.exports = {
     }
     try {
       const checkEmail = await checkUser(setData.user_email)
-      if (setData.user_email === '' || setData.user_email.search('@') < 0) {
+      if (setData.user_name === '') {
+        return helper.response(response, 400, 'Name cannot be empty')
+      } else if (setData.user_email === '' || setData.user_email.search('@') < 0) {
         return helper.response(response, 400, 'Email cannot be empty and must be a valid email')
       } else if (checkEmail.length > 0) {
         return helper.response(response, 400, 'Email is already registered')
       } else if (request.body.user_password.length < 8 || request.body.user_password.length > 16) {
         return helper.response(response, 400, 'Password must be 8-16 characters')
-      } else if (setData.user_name === '') {
-        return helper.response(response, 400, 'Name cannot be empty')
       } else {
         const result = await postUser(setData)
         return helper.response(response, 200, 'Register Success ! Please contact admin to activate your account', result)

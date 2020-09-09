@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 app.use(express.static('uploads'))
 app.use((request, response, next) => {
-  response.header('Access-Control-Allow-Origin', process.env.IP)
+  response.header('Access-Control-Allow-Origin', '*')
   response.header('Access-Control-Allow-Headers', 'Origin, X-Request-With, Content-Type, Accept, Authorization')
   next()
 })
