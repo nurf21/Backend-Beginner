@@ -68,7 +68,7 @@ module.exports = {
   },
   getProductByName: async (request, response) => {
     const { keyword } = request.query
-    const limit = 100
+    const limit = 8
     const totalData = await getProductCountByName(keyword)
     try {
       const searchResult = await getProductByName(keyword, limit)

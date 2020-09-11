@@ -127,6 +127,16 @@ module.exports = {
       }
     })
   },
+  userIdRedis: (request, response, next) => {
+    const { id } = request.params
+    client.get(`userid:${id}`, (error, result) => {
+      if (!error && result != null) {
+        return helper.response(response, 200, `Get User id: ${id} Success`, JSON.parse(result))
+      } else {
+        next()
+      }
+    })
+  },
   clearUser: (request, response, next) => {
     client.keys('user*', (error, keys) => {
       if (!error && keys.length > 0) {

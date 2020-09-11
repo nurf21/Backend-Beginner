@@ -5,6 +5,7 @@ const redis = require('redis')
 const client = redis.createClient()
 const qs = require('querystring')
 const { postUser, checkUser, getUser, getUserCount, getUserById, patchUser } = require('../model/users')
+const { profile } = require('console')
 
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
@@ -38,6 +39,7 @@ module.exports = {
       user_email: request.body.user_email,
       user_password: encryptPassword,
       user_name: request.body.user_name,
+      user_image: 'blank-profile.jpg',
       user_role: 2,
       user_status: 0,
       user_created_at: new Date()
@@ -119,6 +121,20 @@ module.exports = {
         return helper.response(response, 200, 'Get User Success', result, pageInfo)
       } else {
         return helper.response(response, 200, 'Get User Success', [], pageInfo)
+      }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getUserById: async (request, response) => {
+    try {
+      const { id } = request.params
+      const result = await getUserById(id)
+      if (result.length > 0) {
+        client.setex(`userid:${id}`, 3600, JSON.stringify(result))
+        return helper.response(response, 200, `Get User id: ${id} Success`, result)
+      } else {
+        return helper.response(response, 404, `User id: ${id} not found`, result)
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

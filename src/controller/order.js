@@ -84,6 +84,7 @@ module.exports = {
   postOrder: async (request, response) => {
     try {
       const setData = {
+        user_id: request.body.user_id,
         history_invoice: Math.floor(100000 + Math.random() * 900000),
         history_subtotal: 0,
         history_created_at: new Date()
