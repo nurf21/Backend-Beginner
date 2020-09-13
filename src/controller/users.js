@@ -5,7 +5,6 @@ const redis = require('redis')
 const client = redis.createClient()
 const qs = require('querystring')
 const { postUser, checkUser, getUser, getUserCount, getUserById, patchUser } = require('../model/users')
-const { profile } = require('console')
 
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {

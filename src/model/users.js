@@ -27,7 +27,12 @@ module.exports = {
   getUser: (limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM user ORDER BY user_role LIMIT ? OFFSET ?', [limit, offset], (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
+        if (!error) {
+          result.map(value => delete value.user_password)
+          resolve(result)
+        } else {
+          reject(new Error(error))
+        }
       })
     })
   },
@@ -41,7 +46,12 @@ module.exports = {
   getUserById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM user WHERE user_id = ?', id, (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
+        if (!error) {
+          delete result[0].user_password
+          resolve(result)
+        } else {
+          reject(new Error(error))
+        }
       })
     })
   },
