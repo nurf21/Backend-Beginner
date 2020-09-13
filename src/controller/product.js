@@ -133,18 +133,17 @@ module.exports = {
       const { id } = request.params
       const setData = {
         product_name: request.body.product_name,
-        product_image: request.file === undefined ? '' : request.file.filename,
         product_price: request.body.product_price,
         category_id: request.body.category_id,
         product_updated_at: new Date(),
         product_status: request.body.product_status
       }
+      if (request.file !== undefined) {
+        setData.product_image = request.file.filename
+      }
       if (setData.product_name === '') {
         return helper.response(response, 400, 'Name cannot be empty')
-      } else if (setData.product_image === '') {
-        setData.product_image = 'blank-product.jpg'
-      }
-      if (setData.product_price === '') {
+      } else if (setData.product_price === '') {
         return helper.response(response, 400, 'Price cannot be empty')
       } else if (setData.category_id === '') {
         return helper.response(response, 400, 'Please select category')
@@ -153,7 +152,7 @@ module.exports = {
       }
       const checkId = await getProductById(id)
       if (checkId.length > 0) {
-        if (checkId[0].product_image === 'blank-product.jpg') {
+        if (checkId[0].product_image === 'blank-product.jpg' || request.file == undefined) {
           const result = await patchProduct(setData, id)
           return helper.response(response, 201, 'Product Updated', result)
         } else {

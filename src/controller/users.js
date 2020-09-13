@@ -141,20 +141,23 @@ module.exports = {
     }
   },
   patchUser: async (request, response) => {
-    const salt = bcrypt.genSaltSync(10)
-    const encryptPassword = bcrypt.hashSync(request.body.user_password, salt)
     const { id } = request.params
     const setData = {
-      user_password: encryptPassword,
       user_name: request.body.user_name,
       user_role: request.body.user_role,
       user_status: request.body.user_status,
       user_updated_at: new Date()
     }
-    try {
+    if (request.body.user_password !== undefined) {
       if (request.body.user_password.length < 8 || request.body.user_password.length > 16) {
         return helper.response(response, 400, 'Password must be 8-16 characters')
-      } else if (setData.user_name === '') {
+      }
+      const salt = bcrypt.genSaltSync(10)
+      const encryptPassword = bcrypt.hashSync(request.body.user_password, salt)
+      setData.user_password = encryptPassword
+    }
+    try {
+       if (setData.user_name === '') {
         return helper.response(response, 400, 'Name cannot be empty')
       } else if (setData.user_role === '') {
         return helper.response(response, 400, 'Please select role')
