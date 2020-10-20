@@ -30,6 +30,8 @@ const getNextLink = (page, totalPage, currentQuery) => {
   }
 }
 
+let refreshTokens = {}
+
 module.exports = {
   registerUser: async (request, response) => {
     const salt = bcrypt.genSaltSync(10)
@@ -77,8 +79,10 @@ module.exports = {
           if (payload.user_status === 0) {
             return helper.response(response, 400, 'Your account is already registered but not activated, please contact admin first')
           } else {
-            const token = jwt.sign(payload, 'SECRET', { expiresIn: '12h' })
-            payload = { ...payload, token }
+            const token = jwt.sign(payload, 'SECRET', { expiresIn: '1h' })
+            const refreshToken = jwt.sign(payload, 'SECRET', { expiresIn: '48h' })
+            refreshTokens[refreshToken] = checkDataUser[0].user_id
+            payload = { ...payload, token, refreshToken }
             return helper.response(response, 200, 'Login Success', payload)
           }
         } else {
@@ -89,6 +93,28 @@ module.exports = {
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request')
+    }
+  },
+  refreshToken: async (request, response) => {
+    const { userId, refreshToken } = request.body
+    if (refreshToken in refreshTokens && refreshTokens[refreshToken] == userId) {
+      jwt.verify(refreshToken, 'SECRET', (error, result) => {
+        if ((error && error.name === 'JsonWebTokenError') || (error && error.name === 'TokenExpiredError')) {
+          return helper.response(response, 403, error.message)
+        } else {
+          delete result.iat
+          delete result.exp
+          delete refreshTokens[refreshToken]
+          const token = jwt.sign(result, 'SECRET', { expiresIn: '1h' })
+          const refreshTokenAgain = jwt.sign(result, 'SECRET', { expiresIn: '48h' })
+
+          refreshTokens[refreshTokenAgain] = userId
+          const payload = { ...result, token, refreshToken: refreshTokenAgain }
+          return helper.response(response, 200, 'Success Refresh Token !', payload)
+        }
+      })
+    } else {
+      return helper.response(response, 403, 'Please login again.')
     }
   },
   getUser: async (request, response) => {
